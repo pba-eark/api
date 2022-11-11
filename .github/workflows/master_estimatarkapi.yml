@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'estimatarkapi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7B59944E9D8641628EE1DFCF963457D3 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_70678BB272804664902E2ECABD6646E1 }}
           package: .
