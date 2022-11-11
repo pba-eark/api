@@ -42,14 +42,6 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          allow-no-subscriptions: true
-          enable-AzPSSession: true
-          environment: azurecloud
-    
-    
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
@@ -61,5 +53,5 @@ jobs:
         with:
           app-name: 'estimatarkapi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C09AB5F540B7494191EE87E02BB51BBC }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3A3B9415259644F8B4AC2D891AADF629 }}
           package: .
