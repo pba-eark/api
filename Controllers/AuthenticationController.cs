@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using pba_api.Data;
 using pba_api.Models;
+using pba_api.Models.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,13 +26,15 @@ namespace pba_api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] User user)
+        public IActionResult Login([FromBody] UserLoginDTO userLoginDTO)
         {
-            var userDto = Authenticate(user);
+            var user = Authenticate(userLoginDTO);
 
-            if (userDto != null)
+            if (user != null)
             {
-                var token = Generate(userDto);
+                var token = Generate(user);
+
+                return Ok(token);
             }
 
             return NotFound("User not found");
@@ -59,9 +62,9 @@ namespace pba_api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private User Authenticate(User user)
+        private User Authenticate(UserLoginDTO userLoginDto)
         {
-            return _context.Users.FirstOrDefault(o => o.Name.ToLower() == user.Name.ToLower() && o.Password == user.Password);
+            return _context.Users.FirstOrDefault(o => o.Email.ToLower() == userLoginDto.Email.ToLower() && o.Password == userLoginDto.Password);
         }
     }
 }

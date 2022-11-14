@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +12,18 @@ using pba_api.Models;
 
 namespace pba_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        //private readonly User _user;
 
         public UsersController(ApplicationDbContext context)
         {
             _context = context;
+            //_user = GetCurrentUser();
         }
 
         // GET: api/Users
@@ -40,6 +45,24 @@ namespace pba_api.Controllers
             }
 
             return user;
+        }
+
+        private User GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+
+                return new User
+                {
+                    Name = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier).Value,
+                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email).Value,
+                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role).Value
+                };
+            }
+            return null;
         }
 
         // PUT: api/Users/5
