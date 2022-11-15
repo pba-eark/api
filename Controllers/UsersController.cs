@@ -57,9 +57,8 @@ namespace pba_api.Controllers
 
                 return new User
                 {
-                    Name = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier).Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email).Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role).Value
+                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier).Value,
+                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email).Value
                 };
             }
             return null;
