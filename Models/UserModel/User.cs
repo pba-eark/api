@@ -1,4 +1,6 @@
-﻿namespace pba_api.Models
+﻿using pba_api.Models.EstimateSheetModel;
+
+namespace pba_api.Models.UserModel
 {
     public class User
     {
@@ -7,5 +9,7 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public virtual ICollection<EstimateSheet> EstimateSheets { get; set; }
     }
 }
