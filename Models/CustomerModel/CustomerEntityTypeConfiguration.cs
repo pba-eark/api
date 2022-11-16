@@ -8,6 +8,10 @@ namespace pba_api.Models.CustomerModel
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder
+                .UseCollation("utf8mb4_danish_ci")
+                .HasCharSet("utf8mb4");
+
+            builder
                 .HasKey(x => x.Id);
 
             builder

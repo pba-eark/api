@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using pba_api.Models.EstimateSheetModel;
 
 namespace pba_api.Models.SheetStatusModel
 {
@@ -8,6 +7,10 @@ namespace pba_api.Models.SheetStatusModel
     {
         public void Configure(EntityTypeBuilder<SheetStatus> builder)
         {
+            builder
+                .UseCollation("utf8mb4_danish_ci")
+                .HasCharSet("utf8mb4");
+
             builder
                 .HasKey(x => x.Id);
 

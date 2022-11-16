@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace pba_api.Models.UserModel
@@ -8,6 +7,10 @@ namespace pba_api.Models.UserModel
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder
+                .UseCollation("utf8mb4_danish_ci")
+                .HasCharSet("utf8mb4");
+
             builder
                 .HasKey(x => x.Id);
 

@@ -1,4 +1,7 @@
-﻿using pba_api.Models.CustomerModel;
+﻿using pba_api.Models.AdditionalExpensesModel;
+using pba_api.Models.CustomerModel;
+using pba_api.Models.EpicModel;
+using pba_api.Models.EstimateSheetRiskProfileModel;
 using pba_api.Models.SheetStatusModel;
 using pba_api.Models.UserModel;
 
@@ -45,6 +48,11 @@ namespace pba_api.Models.EstimateSheetModel
 
         public int SheetStatusId { get; set; }
         public SheetStatus SheetStatus { get; set; }
+
+        public virtual ICollection<AdditionalExpense> AdditionalExpenses { get; set; }
+        public virtual ICollection<Epic> Epics { get; set; }
+        public virtual ICollection<TaskModel.Task> Tasks { get; set; }
+        public virtual ICollection<EstimateSheetRiskProfile> EstimateSheetRiskProfiles { get; set; }
         #endregion
     }
 }

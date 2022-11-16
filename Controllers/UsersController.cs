@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.Models.User;
+using pba_api.Models.UserModel;
+using System.Security.Claims;
 
 namespace pba_api.Controllers
 {
