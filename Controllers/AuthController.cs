@@ -12,19 +12,19 @@ namespace pba_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private IConfiguration _config;
         private readonly ApplicationDbContext _context;
 
-        public AuthenticationController(IConfiguration config, ApplicationDbContext context)
+        public AuthController(IConfiguration config, ApplicationDbContext context)
         {
             _config = config;
             _context = context;
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("login")]
         public IActionResult Login([FromBody] UserLoginDTO userLoginDTO)
         {
             var user = Authenticate(userLoginDTO);
@@ -53,7 +53,7 @@ namespace pba_api.Controllers
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                     _config["Jwt:Audience"],
                     claims,
-                    expires: DateTime.Now.AddMinutes(15),
+                    expires: DateTime.Now,
                     signingCredentials: credentials
                 );
 

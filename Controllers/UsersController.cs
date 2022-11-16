@@ -22,11 +22,19 @@ namespace pba_api.Controllers
         }
 
         // GET: api/Users
-        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
             return await _context.Users.ToListAsync();
+        }
+
+        // GET: api/Users/Me
+        [HttpGet("me")]
+        public IActionResult GetMe()
+        {
+            var user = GetCurrentUser();
+
+            return Ok(user);
         }
 
         // GET: api/Users/5
@@ -43,7 +51,7 @@ namespace pba_api.Controllers
             return user;
         }
 
-        private User GetCurrentUser()
+        private User? GetCurrentUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
