@@ -54,7 +54,7 @@ namespace pba_api.Controllers
             _context.AdditionalExpenses.Add(additionalExpense);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAdditionalExpenses), new { id = additionalExpense.Id }, dto);
+            return CreatedAtAction(nameof(GetAdditionalExpenses), dto);
         }
 
         // PUT: api/AdditionalExpense/5

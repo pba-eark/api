@@ -19,6 +19,13 @@ namespace pba_api.Models.CustomerModel
                 .HasColumnType("varchar")
                 .HasMaxLength(250)
                 .IsRequired();
+
+            #region EntityRelations
+            builder
+                .HasMany(e => e.EstimateSheets)
+                .WithOne(x => x.Customer)
+                .HasForeignKey(e => e.Id);
+            #endregion
         }
     }
 }

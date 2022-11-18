@@ -31,7 +31,7 @@ namespace pba_api.Controllers
         public async Task<ActionResult<IEnumerable<EpicDto>>> GetEpics()
         {
             var epic = await _context.Epics.ToListAsync();
-            return Ok(_mapper.Map<List<EstimateSheetDto>>(epic));
+            return Ok(_mapper.Map<List<EpicDto>>(epic));
         }
 
         // GET: api/Epics/5
@@ -90,7 +90,7 @@ namespace pba_api.Controllers
             _context.Epics.Add(epic);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetEpic), dto);
+            return CreatedAtAction(nameof(GetEpics), dto);
         }
 
         // DELETE: api/Epics/5
