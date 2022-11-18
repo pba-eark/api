@@ -6,7 +6,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using NuGet.Protocol;
 using pba_api.Data;
-using pba_api.Models.DTOs;
+using pba_api.DTOs;
 using pba_api.Models.UserModel;
 using System;
 using System.IdentityModel.Tokens.Jwt;

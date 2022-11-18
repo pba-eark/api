@@ -1,4 +1,4 @@
-﻿namespace pba_api.Models.DTOs
+﻿namespace pba_api.DTOs
 {
     public class UserLoginDTO
     {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using pba_api.Models.CustomerModel;
 using System.Text;
 
 namespace pba_api.Models.EstimateSheetModel
@@ -15,12 +16,13 @@ namespace pba_api.Models.EstimateSheetModel
             builder
                 .HasKey(x => x.Id);
 
+            //builder.Property(x => x.Id).ValueGeneratedOnAdd().UseMySqlIdentityColumn();
+
             #region EntityRelations
             builder
                 .HasOne(x => x.User)
                 .WithMany(u => u.EstimateSheets)
-                .HasForeignKey(x => x.UserId)
-                .IsRequired();
+                .HasForeignKey(x => x.UserId);
 
             builder
                 .HasOne(x => x.Customer)
@@ -30,8 +32,7 @@ namespace pba_api.Models.EstimateSheetModel
             builder
                 .HasOne(x => x.SheetStatus)
                 .WithMany(s => s.EstimateSheets)
-                .HasForeignKey(x => x.SheetStatusId)
-                .IsRequired();
+                .HasForeignKey(x => x.SheetStatusId);
 
             builder
                 .HasMany(x => x.AdditionalExpenses)
@@ -64,17 +65,36 @@ namespace pba_api.Models.EstimateSheetModel
             builder
                 .Property(x => x.WorkbookLink)
                 .HasColumnType("varchar")
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .IsRequired(false);
 
             builder
                 .Property(x => x.JiraLink)
                 .HasColumnType("varchar")
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .IsRequired(false);
 
             builder
                 .Property(x => x.WireframeLink)
                 .HasColumnType("varchar")
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .IsRequired(false);
+
+            // NavigationProperties
+            //builder
+            //    .Property(x => x.UserId)
+            //    .HasColumnType("int")
+            //    .IsRequired();
+
+            //builder
+            //    .Property(x => x.CustomerId)
+            //    .HasColumnType("int");
+            //    //.IsRequired(false);
+
+            //builder
+            //    .Property(x => x.SheetStatusId)
+            //    .HasColumnType("int");
+            //    //.IsRequired(false);
             #endregion
         }
     }

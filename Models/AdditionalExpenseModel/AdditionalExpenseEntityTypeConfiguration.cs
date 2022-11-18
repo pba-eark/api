@@ -30,6 +30,11 @@ namespace pba_api.Models.AdditionalExpenseModel
                 .Property(x => x.Continuous)
                 .HasColumnType("bit")
                 .IsRequired();
+
+            builder
+                .HasOne(x => x.EstimateSheet)
+                .WithMany(c => c.AdditionalExpenses)
+                .HasForeignKey(x => x.EstimateSheetId);
         }
     }
 }

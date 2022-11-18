@@ -15,7 +15,7 @@ namespace pba_api.Models.SheetStatusModel
                 .HasKey(x => x.Id);
 
             builder
-                .Property(x => x.SheetStausName)
+                .Property(x => x.SheetStatusName)
                 .HasColumnType("varchar")
                 .HasMaxLength(50)
                 .IsRequired();
