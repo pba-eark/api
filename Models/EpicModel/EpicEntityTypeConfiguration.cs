@@ -24,6 +24,11 @@ namespace pba_api.Models.EpicModel
                 .WithMany(e => e.Epics)
                 .HasForeignKey(x => x.EpicStatusId)
                 .IsRequired();
+
+            builder
+                .HasOne(x => x.EstimateSheet)
+                .WithMany(e => e.Epics)
+                .HasForeignKey(x => x.EstimateSheetId);
         }
     }
 }

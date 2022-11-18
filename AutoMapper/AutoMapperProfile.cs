@@ -2,6 +2,8 @@
 using pba_api.DTOs;
 using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.CustomerModel;
+using pba_api.Models.EpicModel;
+using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
 using pba_api.Models.UserModel;
 
@@ -23,6 +25,11 @@ namespace pba_api.AutoMapper
             CreateMap<AdditionalExpense, AdditionalExpenseDto>();
             CreateMap<AdditionalExpenseDto, AdditionalExpense>();
 
+            CreateMap<Epic, EpicDto>();
+            CreateMap<EpicDto, Epic>();
+
+            CreateMap<EpicStatus, EpicStatusDto>();
+            CreateMap<EpicStatusDto, EpicStatus>();
         }
     }
 }
