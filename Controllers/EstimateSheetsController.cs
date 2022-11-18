@@ -34,7 +34,7 @@ namespace pba_api.Controllers
 
         // GET: api/EstimateSheets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EstimateSheetIncludedDto>> GetEstimateSheets(int id, [FromQuery] string? included)
+        public async Task<ActionResult<ExpandoObject>> GetEstimateSheets(int id, [FromQuery] string? included)
         {
             string[] queryParams = Array.Empty<string>();
 
@@ -52,9 +52,9 @@ namespace pba_api.Controllers
 
             EstimateSheetDto estimateSheet = _mapper.Map<EstimateSheetDto>(estimateSheetDb);
 
-            EstimateSheetIncludedDto returnObj = new();
+            dynamic returnObj = new ExpandoObject();
 
-            returnObj.sheet = estimateSheet;
+            returnObj.estimateSheet = estimateSheet;
 
             if (queryParams.Length > 0 && queryParams.Contains("user"))
             {
