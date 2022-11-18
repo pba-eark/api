@@ -12,6 +12,7 @@ using pba_api.Models.RoleModel;
 using pba_api.Models.SheetStatusModel;
 using pba_api.Models.TaskModel;
 using pba_api.Models.UserModel;
+using pba_api.DTOs;
 
 namespace pba_api.Data
 {
@@ -34,16 +35,15 @@ namespace pba_api.Data
             new EstimateSheetRiskProfileEntityTypeConfiguration().Configure(modelBuilder.Entity<EstimateSheetRiskProfile>());
         }
 
-        public DbSet<Employee> Employees { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<EstimateSheet> EstimateSheets { get; set; }
-        public DbSet<SheetStatus> SheetStatuses { get; set; }
+        public DbSet<SheetStatus> SheetStatus { get; set; }
         public DbSet<AdditionalExpense> AdditionalExpenses { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Epic> Epics { get; set; }
-        public DbSet<EpicStatus> EpicStatuses { get; set; }
-        public DbSet<Models.TaskModel.Task> Task { get; set; }
-        public DbSet<Role> Role { get; set; }
+        public DbSet<EpicStatus> EpicStatus { get; set; }
+        public DbSet<Models.TaskModel.Task> Tasks { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<RiskProfile> RiskProfiles { get; set; }
         public DbSet<EstimateSheetRiskProfile> EstimateSheetRiskProfiles { get; set; }
     }

@@ -17,7 +17,7 @@ namespace pba_api.Models.EstimateSheetModel
         /// <summary>
         /// Name of the <see cref="EstimateSheet"/>
         /// </summary>
-        public string SheetName { get; set; }
+        public string SheetName { get; set; } = string.Empty;
 
         /// <summary>
         /// Id of the Jira Board, where the <see cref="EstimateSheet"/> sends and gets task
@@ -27,17 +27,17 @@ namespace pba_api.Models.EstimateSheetModel
         /// <summary>
         /// Link to Workbook
         /// </summary>
-        public string WorkbookLink { get; set; }
+        public string WorkbookLink { get; set; } = string.Empty;
 
         /// <summary>
         /// Link to Jira Board
         /// </summary>
-        public string JiraLink { get; set; }
+        public string JiraLink { get; set; } = string.Empty;
 
         /// <summary>
         /// Link to Wireframes
         /// </summary>
-        public string WireframeLink { get; set; }
+        public string WireframeLink { get; set; } = string.Empty;
 
         #region NavigationProperties
         public int UserId { get; set; }

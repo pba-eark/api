@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using pba_api.Data;
-using pba_api.Models.DTOs;
+using pba_api.DTOs;
 using pba_api.Models.UserModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
