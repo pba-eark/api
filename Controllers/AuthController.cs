@@ -65,7 +65,7 @@ namespace pba_api.Controllers
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                     _config["Jwt:Audience"],
                     claims,
-                    expires: DateTime.Now,
+                    expires: DateTime.Now.AddDays(7),
                     signingCredentials: credentials
                 );
 
