@@ -39,11 +39,11 @@ namespace pba_api.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLoginDTO userLoginDTO)
         {
-            var user = Authenticate(userLoginDTO);
+            var user = AuthenticateUser(userLoginDTO);
 
             if (user != null)
             {
-                var token = Generate(user);
+                var token = GenerateToken(user);
 
                 return Ok(token);
             }
@@ -51,7 +51,7 @@ namespace pba_api.Controllers
             return NotFound("User not found");
         }
 
-        private string Generate(User user)
+        private string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -72,7 +72,7 @@ namespace pba_api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private User Authenticate(UserLoginDTO userLoginDto)
+        private User AuthenticateUser(UserLoginDTO userLoginDto)
         {
             return _context.Users.FirstOrDefault(o => o.Email.ToLower() == userLoginDto.Email.ToLower() && o.Password == userLoginDto.Password);
         }
