@@ -1,4 +1,5 @@
 ﻿using pba_api.Models.EstimateSheetModel;
+using System.Text.Json.Serialization;
 
 namespace pba_api.Models.UserModel
 {
@@ -9,7 +10,7 @@ namespace pba_api.Models.UserModel
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<EstimateSheet> EstimateSheets { get; set; }
     }
 }
