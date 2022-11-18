@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using pba_api.Data;
 using pba_api.DTOs;
 using pba_api.Models.EstimateSheetModel;
 using pba_api.Models.UserModel;
+using System.Dynamic;
 
 namespace pba_api.Controllers
 {
@@ -32,8 +34,15 @@ namespace pba_api.Controllers
 
         // GET: api/EstimateSheets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EstimateSheetDto>> GetEstimateSheets(int id)
+        public async Task<ActionResult<EstimateSheetIncludedDto>> GetEstimateSheets(int id, [FromQuery] string? included)
         {
+            string[] queryParams = Array.Empty<string>();
+
+            if (included != null)
+            {
+                queryParams = included.Split(",");
+            }
+
             var estimateSheetDb = await _context.EstimateSheets.FindAsync(id);
 
             if (estimateSheetDb == null)
@@ -41,9 +50,31 @@ namespace pba_api.Controllers
                 return NotFound();
             }
 
-            var estimateSheet = _mapper.Map<EstimateSheetDto>(estimateSheetDb);
+            EstimateSheetDto estimateSheet = _mapper.Map<EstimateSheetDto>(estimateSheetDb);
 
-            return estimateSheet;
+            EstimateSheetIncludedDto returnObj = new();
+
+            returnObj.sheet = estimateSheet;
+
+            if (queryParams.Length > 0 && queryParams.Contains("user"))
+            {
+                var user = await _context.Users.FindAsync(estimateSheetDb.UserId);
+                returnObj.user = user;
+            }
+
+            if (queryParams.Length > 0 && queryParams.Contains("customer"))
+            {
+                var customer = await _context.Customers.FindAsync(estimateSheetDb.CustomerId);
+                returnObj.customer = customer;
+            }
+
+            if (queryParams.Length > 0 && queryParams.Contains("status"))
+            {
+                var status = await _context.SheetStatus.FindAsync(estimateSheetDb.SheetStatusId);
+                returnObj.status = status;
+            }
+
+            return Ok(returnObj);
         }
 
         // POST: api/EstimateSheets
