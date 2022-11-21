@@ -22,7 +22,7 @@ namespace pba_api.Models.EpicStatusModel
             #region EntityRelations
             builder
                 .HasMany(e => e.Epics)
-                .WithOne(x => x.Epic)
+                .WithOne(x => x.EpicStatus)
                 .HasForeignKey(e => e.Id);
             #endregion
         }

@@ -1,6 +1,6 @@
-﻿namespace pba_api.DTOs
+﻿namespace pba_api.DTOs.CreateDtos
 {
-    public class EstimateSheetDto
+    public class CreateEstimateSheetDto
     {
         /// <summary>
         /// The id of the <see cref="EstimateSheet"/>

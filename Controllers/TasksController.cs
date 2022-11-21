@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.DTOs;
-using pba_api.Models.AdditionalExpensesModel;
-using pba_api.Models.TaskModel;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
 
 namespace pba_api.Controllers
 {
@@ -24,15 +22,15 @@ namespace pba_api.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<ReturnTaskDto>>> GetTasks()
         {
             var tasks = await _context.Tasks.ToListAsync();
-            return Ok(_mapper.Map<List<TaskDto>>(tasks));
+            return Ok(_mapper.Map<List<ReturnTaskDto>>(tasks));
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskDto>> GetTask(int id)
+        public async Task<ActionResult<ReturnTaskDto>> GetTask(int id)
         {
             var dbObject = await _context.Tasks.FindAsync(id);
 
@@ -41,12 +39,12 @@ namespace pba_api.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<TaskDto>(dbObject);
+            return _mapper.Map<ReturnTaskDto>(dbObject);
         }
 
         // POST: api/Tasks
         [HttpPost]
-        public async Task<ActionResult<TaskDto>> PostTask(TaskDto dto)
+        public async Task<ActionResult<CreateTaskDto>> PostTask(CreateTaskDto dto)
         {
             var task = _mapper.Map<Models.TaskModel.Task>(dto);
             _context.Tasks.Add(task);
@@ -58,7 +56,7 @@ namespace pba_api.Controllers
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(int id, TaskDto dto)
+        public async Task<IActionResult> PutTask(int id, CreateTaskDto dto)
         {
             //if (id != dto.Id)
             //{

@@ -21,10 +21,9 @@ namespace pba_api.Models.EpicModel
 
             #region EntityRelations
             builder
-                .HasOne(x => x.Epic)
+                .HasOne(x => x.EpicStatus)
                 .WithMany(e => e.Epics)
-                .HasForeignKey(x => x.EpicStatusId)
-                .IsRequired();
+                .HasForeignKey(x => x.EpicStatusId);
 
             builder
                 .HasOne(x => x.EstimateSheet)

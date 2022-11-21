@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using pba_api.DTOs;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.CustomerModel;
 using pba_api.Models.EpicModel;
 using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
 using pba_api.Models.RiskProfileModel;
+using pba_api.Models.RoleModel;
+using pba_api.Models.SheetStatusModel;
 using pba_api.Models.UserModel;
 
 namespace pba_api.AutoMapper
@@ -14,29 +18,44 @@ namespace pba_api.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<EstimateSheet, EstimateSheetDto>();
-            CreateMap<EstimateSheetDto, EstimateSheet>();
+            CreateMap<EstimateSheet, CreateEstimateSheetDto>();
+            CreateMap<CreateEstimateSheetDto, EstimateSheet>();
 
             CreateMap<User, CreateUserDto>();
             CreateMap<CreateUserDto, User>();
+            CreateMap<User, ReturnUserDto>();
 
-            CreateMap<Customer, CustomerDto>();
-            CreateMap<CustomerDto, Customer>();
+            CreateMap<Customer, CreateCustomerDto>();
+            CreateMap<CreateCustomerDto, Customer>();
+            CreateMap<Customer, ReturnCustomerDto>();
 
-            CreateMap<AdditionalExpense, AdditionalExpenseDto>();
-            CreateMap<AdditionalExpenseDto, AdditionalExpense>();
+            CreateMap<AdditionalExpense, CreateAdditionalExpenseDto>();
+            CreateMap<CreateAdditionalExpenseDto, AdditionalExpense>();
+            CreateMap<AdditionalExpense, ReturnAdditionalExpenseDto>();
 
-            CreateMap<Epic, EpicDto>();
-            CreateMap<EpicDto, Epic>();
+            CreateMap<Epic, CreateEpicDto>();
+            CreateMap<CreateEpicDto, Epic>();
+            CreateMap<Epic, ReturnEpicDto>();
 
-            CreateMap<EpicStatus, EpicStatusDto>();
-            CreateMap<EpicStatusDto, EpicStatus>();
+            CreateMap<EpicStatus, CreateEpicStatusDto>();
+            CreateMap<CreateEpicStatusDto, EpicStatus>();
+            CreateMap<EpicStatus, ReturnEpicStatusDto>();
 
-            CreateMap<Task, TaskDto>();
-            CreateMap<TaskDto, Task>();
+            CreateMap<Task, CreateTaskDto>();
+            CreateMap<CreateTaskDto, Task>();
+            CreateMap<Task, ReturnTaskDto>();
 
-            CreateMap<RiskProfile, RiskProfileDto>();
-            CreateMap<RiskProfileDto, RiskProfile>();
+            CreateMap<RiskProfile, CreateRiskProfileDto>();
+            CreateMap<CreateRiskProfileDto, RiskProfile>();
+            CreateMap<RiskProfile, ReturnRiskProfileDto>();
+
+            CreateMap<SheetStatus, CreateSheetStatusDto>();
+            CreateMap<CreateSheetStatusDto, SheetStatus>();
+            CreateMap<SheetStatus, ReturnSheetStatusDto>();
+
+            CreateMap<Role, CreateRoleDto>();
+            CreateMap<CreateRoleDto, Role>();
+            CreateMap<Role, ReturnRoleDto>();
         }
     }
 }

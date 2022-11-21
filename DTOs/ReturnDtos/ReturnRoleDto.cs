@@ -1,11 +1,9 @@
-﻿namespace pba_api.Models.RoleModel
+﻿namespace pba_api.DTOs.ReturnDtos
 {
-    public class Role
+    public class ReturnRoleDto
     {
         public int Id { get; set; }
         public string RoleName { get; set; } = string.Empty;
         public double HourlyWage { get; set; }
-
-        public virtual ICollection<TaskModel.Task> Tasks { get; set; }
     }
 }

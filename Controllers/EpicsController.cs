@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.DTOs;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.EpicModel;
-using pba_api.Models.EstimateSheetModel;
 
 namespace pba_api.Controllers
 {
@@ -28,37 +24,31 @@ namespace pba_api.Controllers
 
         // GET: api/Epics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EpicDto>>> GetEpics()
+        public async Task<ActionResult<IEnumerable<ReturnEpicDto>>> GetEpics()
         {
-            var epic = await _context.Epics.ToListAsync();
-            return Ok(_mapper.Map<List<EpicDto>>(epic));
+            var dbObject = await _context.Epics.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnEpicDto>>(dbObject));
         }
 
         // GET: api/Epics/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EpicDto>> GetEpic(int id)
+        public async Task<ActionResult<ReturnEpicDto>> GetEpic(int id)
         {
-            var epicDb = await _context.Epics.FindAsync(id);
+            var dbObject = await _context.Epics.FindAsync(id);
 
-            if (epicDb == null)
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            var epic = _mapper.Map<EpicDto>(epicDb);
-
-            return epic;
+            return _mapper.Map<ReturnEpicDto>(dbObject);
         }
 
         // PUT: api/Epics/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEpic(int id, EpicDto dto)
+        public async Task<IActionResult> PutEpic(int id, CreateEpicDto dto)
         {
-            //if (id != dto.Id)
-            //{
-            //    return BadRequest();
-            //}
             var epic = _mapper.Map<Epic>(dto);
             _context.Entry(epic).State = EntityState.Modified;
 
@@ -84,26 +74,27 @@ namespace pba_api.Controllers
         // POST: api/Epics
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<EpicDto>> PostEpic(EpicDto dto)
+        public async Task<ActionResult<ReturnEpicDto>> PostEpic(CreateEpicDto dto)
         {
             var epic = _mapper.Map<Epic>(dto);
             _context.Epics.Add(epic);
             await _context.SaveChangesAsync();
+            var returnDto = _mapper.Map<ReturnEpicDto>(epic);
 
-            return CreatedAtAction(nameof(GetEpics), dto);
+            return CreatedAtAction(nameof(GetEpics), returnDto);
         }
 
         // DELETE: api/Epics/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEpic(int id)
         {
-            var epic = await _context.Epics.FindAsync(id);
-            if (epic == null)
+            var dbObject = await _context.Epics.FindAsync(id);
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            _context.Epics.Remove(epic);
+            _context.Epics.Remove(dbObject);
             await _context.SaveChangesAsync();
 
             return NoContent();

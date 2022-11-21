@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
 using pba_api.DTOs;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.RiskProfileModel;
 
 namespace pba_api.Controllers
@@ -23,15 +25,15 @@ namespace pba_api.Controllers
 
         // GET: api/RiskProfiles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RiskProfileDto>>> GetRiskProfiles()
+        public async Task<ActionResult<IEnumerable<ReturnRiskProfileDto>>> GetRiskProfiles()
         {
             var riskProfiles = await _context.RiskProfiles.ToListAsync();
-            return Ok(_mapper.Map<List<RiskProfileDto>>(riskProfiles));
+            return Ok(_mapper.Map<List<ReturnRiskProfileDto>>(riskProfiles));
         }
 
         // GET: api/RiskProfiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RiskProfileDto>> GetRiskProfile(int id)
+        public async Task<ActionResult<ReturnRiskProfileDto>> GetRiskProfile(int id)
         {
             var dbObject = await _context.RiskProfiles.FindAsync(id);
 
@@ -40,30 +42,26 @@ namespace pba_api.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<RiskProfileDto>(dbObject);
+            return _mapper.Map<ReturnRiskProfileDto>(dbObject);
         }
 
         // POST: api/RiskProfiles
         [HttpPost]
-        public async Task<ActionResult<RiskProfileDto>> PostRiskProfile(RiskProfileDto dto)
+        public async Task<ActionResult<ReturnRiskProfileDto>> PostRiskProfile(CreateRiskProfileDto dto)
         {
             var riskProfile = _mapper.Map<RiskProfile>(dto);
             _context.RiskProfiles.Add(riskProfile);
             await _context.SaveChangesAsync();
+            var returnDto = _mapper.Map<ReturnRiskProfileDto>(riskProfile);
 
-            return CreatedAtAction(nameof(GetRiskProfile), dto);
+            return CreatedAtAction(nameof(GetRiskProfile), returnDto);
         }
 
         // PUT: api/RiskProfiles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRiskProfile(int id, RiskProfileDto dto)
+        public async Task<IActionResult> PutRiskProfile(int id, CreateRiskProfileDto dto)
         {
-            //if (id != dto.Id)
-            //{
-            //    return BadRequest();
-            //}
-
             var riskProfile = _mapper.Map<RiskProfile>(dto);
             _context.Entry(riskProfile).State = EntityState.Modified;
 
@@ -90,13 +88,13 @@ namespace pba_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRiskProfile(int id)
         {
-            var riskProfile = await _context.RiskProfiles.FindAsync(id);
-            if (riskProfile == null)
+            var dbObject = await _context.RiskProfiles.FindAsync(id);
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            _context.RiskProfiles.Remove(riskProfile);
+            _context.RiskProfiles.Remove(dbObject);
             await _context.SaveChangesAsync();
 
             return NoContent();

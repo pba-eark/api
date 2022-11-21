@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using pba_api.Models;
 using pba_api.Models.AdditionalExpenseModel;
 using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.CustomerModel;
@@ -12,7 +11,6 @@ using pba_api.Models.RoleModel;
 using pba_api.Models.SheetStatusModel;
 using pba_api.Models.TaskModel;
 using pba_api.Models.UserModel;
-using pba_api.DTOs;
 
 namespace pba_api.Data
 {

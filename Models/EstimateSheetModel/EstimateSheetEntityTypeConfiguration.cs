@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using pba_api.Models.CustomerModel;
-using System.Text;
 
 namespace pba_api.Models.EstimateSheetModel
 {
@@ -49,10 +47,10 @@ namespace pba_api.Models.EstimateSheetModel
                 .WithOne(x => x.EstimateSheet)
                 .HasForeignKey(t => t.Id);
 
-            builder
-                .HasMany(e => e.EstimateSheetRiskProfiles)
-                .WithOne(x => x.EstimateSheet)
-                .HasForeignKey(e => new { e.RiskProfileId, e.EstimateSheetId });
+            //builder
+            //    .HasMany(e => e.EstimateSheetRiskProfiles)
+            //    .WithOne(x => x.EstimateSheet)
+            //    .HasForeignKey(e => new { e.RiskProfileId, e.EstimateSheetId });
             #endregion
 
             #region PropertyConfigurations

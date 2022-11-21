@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.DTOs;
-using pba_api.Models.EstimateSheetModel;
+using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.UserModel;
 
 namespace pba_api.Controllers
@@ -26,11 +25,11 @@ namespace pba_api.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
             var users = await _context.Users.ToListAsync();
-            return Ok(_mapper.Map<List<CreateUserDto>>(users));
+            return Ok(_mapper.Map<List<ReturnUserDto>>(users));
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(CreateUserDto dto)
+        public async Task<ActionResult<User>> PostUser(ReturnUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
             _context.Users.Add(user);

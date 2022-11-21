@@ -1,9 +1,8 @@
-﻿namespace pba_api.DTOs
+﻿namespace pba_api.DTOs.CreateDtos
 {
-    public class AdditionalExpenseDto
+    public class CreateAdditionalExpenseDto
     {
-        public int Id { get; set; }
-        public string ExpenseName { get; set; }
+        public string ExpenseName { get; set; } = string.Empty;
         public double Price { get; set; }
         public bool Continuous { get; set; }
         public int EstimateSheetId { get; set; }

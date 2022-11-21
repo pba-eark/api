@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.DTOs;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.AdditionalExpensesModel;
-using pba_api.Models.EstimateSheetModel;
 
 namespace pba_api.Controllers
 {
@@ -24,49 +23,43 @@ namespace pba_api.Controllers
 
         // GET: api/AdditionalExpenses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdditionalExpenseDto>>> GetAdditionalExpenses()
+        public async Task<ActionResult<IEnumerable<ReturnAdditionalExpenseDto>>> GetAdditionalExpenses()
         {
             var additionalExpenses = await _context.AdditionalExpenses.ToListAsync();
-            return Ok(_mapper.Map<List<AdditionalExpenseDto>>(additionalExpenses));
+            return Ok(_mapper.Map<List<ReturnAdditionalExpenseDto>>(additionalExpenses));
         }
 
         // GET: api/AdditionalExpenses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdditionalExpenseDto>> GetAdditionalExpenses(int id)
+        public async Task<ActionResult<ReturnAdditionalExpenseDto>> GetAdditionalExpense(int id)
         {
-            var additionalExpensesDb = await _context.AdditionalExpenses.FindAsync(id);
+            var dbObject = await _context.AdditionalExpenses.FindAsync(id);
 
-            if (additionalExpensesDb == null)
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            var additionalExpenses = _mapper.Map<AdditionalExpenseDto>(additionalExpensesDb);
-
-            return additionalExpenses;
+            return _mapper.Map<ReturnAdditionalExpenseDto>(dbObject);
         }
 
         // POST: api/AdditionalExpenses
         [HttpPost]
-        public async Task<ActionResult<AdditionalExpenseDto>> PostAdditionalExpense(AdditionalExpenseDto dto)
+        public async Task<ActionResult<ReturnAdditionalExpenseDto>> PostAdditionalExpense(CreateAdditionalExpenseDto dto)
         {
             var additionalExpense = _mapper.Map<AdditionalExpense>(dto);
             _context.AdditionalExpenses.Add(additionalExpense);
             await _context.SaveChangesAsync();
+            var returnDto = _mapper.Map<ReturnAdditionalExpenseDto>(additionalExpense);
 
-            return CreatedAtAction(nameof(GetAdditionalExpenses), dto);
+            return CreatedAtAction(nameof(GetAdditionalExpense), returnDto);
         }
 
         // PUT: api/AdditionalExpense/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdditionalExpense(int id, AdditionalExpenseDto dto)
+        public async Task<IActionResult> PutAdditionalExpense(int id, CreateAdditionalExpenseDto dto)
         {
-            if (id != dto.Id)
-            {
-                return BadRequest();
-            }
-
             var additionalExpense = _mapper.Map<AdditionalExpense>(dto);
             _context.Entry(additionalExpense).State = EntityState.Modified;
 
@@ -93,13 +86,13 @@ namespace pba_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdditionalExpense(int id)
         {
-            var additionalExpenses = await _context.AdditionalExpenses.FindAsync(id);
-            if (additionalExpenses == null)
+            var dbObject = await _context.AdditionalExpenses.FindAsync(id);
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            _context.AdditionalExpenses.Remove(additionalExpenses);
+            _context.AdditionalExpenses.Remove(dbObject);
             await _context.SaveChangesAsync();
 
             return NoContent();

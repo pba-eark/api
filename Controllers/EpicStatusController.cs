@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.DTOs;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.EpicStatusModel;
-using pba_api.Models.EstimateSheetModel;
 
 namespace pba_api.Controllers
 {
@@ -24,49 +24,45 @@ namespace pba_api.Controllers
 
         // GET: api/EpicStatus
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EpicStatusDto>>> GetEpicStatus()
+        public async Task<ActionResult<IEnumerable<ReturnEpicStatusDto>>> GetEpicStatus()
         {
-            var epicStatus = await _context.EpicStatus.ToListAsync();
-            return Ok(_mapper.Map<List<EpicStatusDto>>(epicStatus));
+            var dbObject = await _context.EpicStatus.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnEpicStatusDto>>(dbObject));
         }
 
         // GET: api/EpicStatus/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EpicStatusDto>> GetEpicStatus(int id)
+        public async Task<ActionResult<ReturnEpicStatusDto>> GetEpicStatus(int id)
         {
-            var epicStatusDb = await _context.EpicStatus.FindAsync(id);
+            var dbObject = await _context.EpicStatus.FindAsync(id);
 
-            if (epicStatusDb == null)
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            var epicStatus = _mapper.Map<EpicStatusDto>(epicStatusDb);
+            var epicStatus = _mapper.Map<ReturnEpicStatusDto>(dbObject);
 
             return epicStatus;
         }
 
         // POST: api/EpicStatus
         [HttpPost]
-        public async Task<ActionResult<EpicStatusDto>> PostEpicStatus(EpicStatusDto dto)
+        public async Task<ActionResult<ReturnEpicStatusDto>> PostEpicStatus(CreateEpicStatusDto dto)
         {
             var epicStatus = _mapper.Map<EpicStatus>(dto);
             _context.EpicStatus.Add(epicStatus);
             await _context.SaveChangesAsync();
+            var returnDto = _mapper.Map<ReturnEpicStatusDto>(epicStatus);
 
-            return CreatedAtAction(nameof(GetEpicStatus), new { id = epicStatus.Id }, dto);
+            return CreatedAtAction(nameof(GetEpicStatus), returnDto);
         }
 
         // PUT: api/EpicStatus/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEpicStatus(int id, EpicStatusDto dto)
+        public async Task<IActionResult> PutEpicStatus(int id, CreateEpicStatusDto dto)
         {
-            if (id != dto.Id)
-            {
-                return BadRequest();
-            }
-
             var epicStatus = _mapper.Map<EpicStatus>(dto);
             _context.Entry(epicStatus).State = EntityState.Modified;
 
