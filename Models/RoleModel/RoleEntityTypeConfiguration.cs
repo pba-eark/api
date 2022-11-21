@@ -24,6 +24,14 @@ namespace pba_api.Models.RoleModel
                 .Property(x => x.HourlyWage)
                 .HasColumnType("float")
                 .IsRequired();
+
+            #region EntityRelations
+            builder
+                .HasMany(e => e.Tasks)
+                .WithOne(x => x.Role)
+                .HasForeignKey(e => e.Id);
+            #endregion
+
         }
     }
 }

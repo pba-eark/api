@@ -19,11 +19,17 @@ namespace pba_api.Models.EpicModel
                 .HasColumnType("varchar")
                 .HasMaxLength(50);
 
+            #region EntityRelations
             builder
                 .HasOne(x => x.EpicStatus)
                 .WithMany(e => e.Epics)
-                .HasForeignKey(x => x.EpicStatusId)
-                .IsRequired();
+                .HasForeignKey(x => x.EpicStatusId);
+
+            builder
+                .HasOne(x => x.EstimateSheet)
+                .WithMany(e => e.Epics)
+                .HasForeignKey(x => x.EstimateSheetId);
+            #endregion
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using pba_api.Data;
 using pba_api.DTOs;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.EstimateSheetModel;
-using pba_api.Models.UserModel;
 using System.Dynamic;
 
 namespace pba_api.Controllers
@@ -28,13 +27,13 @@ namespace pba_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EstimateSheet>>> GetEstimateSheets()
         {
-            var estimateSheet =  await _context.EstimateSheets.ToListAsync();
-            return Ok(_mapper.Map<List<EstimateSheetDto>>(estimateSheet));
+            var estimateSheet = await _context.EstimateSheets.ToListAsync();
+            return Ok(_mapper.Map<List<CreateEstimateSheetDto>>(estimateSheet));
         }
 
         // GET: api/EstimateSheets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExpandoObject>> GetEstimateSheets(int id, [FromQuery] string? included)
+        public async Task<ActionResult<ExpandoObject>> GetEstimateSheet(int id, [FromQuery] string? included)
         {
             string[] queryParams = Array.Empty<string>();
 
@@ -43,14 +42,14 @@ namespace pba_api.Controllers
                 queryParams = included.Split(",");
             }
 
-            var estimateSheetDb = await _context.EstimateSheets.FindAsync(id);
+            var dbObject = await _context.EstimateSheets.FindAsync(id);
 
-            if (estimateSheetDb == null)
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            EstimateSheetDto estimateSheet = _mapper.Map<EstimateSheetDto>(estimateSheetDb);
+            CreateEstimateSheetDto estimateSheet = _mapper.Map<CreateEstimateSheetDto>(dbObject);
 
             dynamic returnObj = new ExpandoObject();
 
@@ -58,19 +57,19 @@ namespace pba_api.Controllers
 
             if (queryParams.Length > 0 && queryParams.Contains("user"))
             {
-                var user = await _context.Users.FindAsync(estimateSheetDb.UserId);
-                returnObj.user = user;
+                var user = await _context.Users.FindAsync(dbObject.UserId);
+                returnObj.user = _mapper.Map<ReturnUserDto>(user);
             }
 
             if (queryParams.Length > 0 && queryParams.Contains("customer"))
             {
-                var customer = await _context.Customers.FindAsync(estimateSheetDb.CustomerId);
-                returnObj.customer = customer;
+                var customer = await _context.Customers.FindAsync(dbObject.CustomerId);
+                returnObj.customer = _mapper.Map<ReturnCustomerDto>(customer);
             }
 
             if (queryParams.Length > 0 && queryParams.Contains("status"))
             {
-                var status = await _context.SheetStatus.FindAsync(estimateSheetDb.SheetStatusId);
+                var status = await _context.SheetStatus.FindAsync(dbObject.SheetStatusId);
                 returnObj.status = status;
             }
 
@@ -79,7 +78,7 @@ namespace pba_api.Controllers
 
         // POST: api/EstimateSheets
         [HttpPost]
-        public async Task<ActionResult<EstimateSheetDto>> PostEstimateSheet(EstimateSheetDto dto)
+        public async Task<ActionResult<CreateEstimateSheetDto>> PostEstimateSheet(CreateEstimateSheetDto dto)
         {
             var estimateSheet = _mapper.Map<EstimateSheet>(dto);
             _context.EstimateSheets.Add(estimateSheet);
@@ -91,7 +90,7 @@ namespace pba_api.Controllers
         // PUT: api/EstimateSheets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstimateSheet(int id, EstimateSheetDto dto)
+        public async Task<IActionResult> PutEstimateSheet(int id, CreateEstimateSheetDto dto)
         {
             if (id != dto.Id)
             {

@@ -85,7 +85,7 @@ namespace pba_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpicStatusId");
+                    b.HasIndex("EstimateSheetId");
 
                     b.ToTable("Epics");
 
@@ -115,7 +115,6 @@ namespace pba_api.Migrations
             modelBuilder.Entity("pba_api.Models.EstimateSheetModel.EstimateSheet", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("CustomerId")
@@ -149,10 +148,6 @@ namespace pba_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("SheetStatusId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("EstimateSheets");
@@ -170,8 +165,6 @@ namespace pba_api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("RiskProfileId", "EstimateSheetId");
-
-                    b.HasIndex("EstimateSheetId");
 
                     b.ToTable("EstimateSheetRiskProfiles");
 
@@ -280,10 +273,6 @@ namespace pba_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RiskProfileId");
-
-                    b.HasIndex("RoleId");
-
                     b.ToTable("Tasks");
 
                     MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb4");
@@ -337,13 +326,13 @@ namespace pba_api.Migrations
 
             modelBuilder.Entity("pba_api.Models.EpicModel.Epic", b =>
                 {
-                    b.HasOne("pba_api.Models.EpicStatusModel.EpicStatus", "EpicStatus")
+                    b.HasOne("pba_api.Models.EstimateSheetModel.EstimateSheet", "EstimateSheet")
                         .WithMany("Epics")
-                        .HasForeignKey("EpicStatusId")
+                        .HasForeignKey("EstimateSheetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pba_api.Models.EstimateSheetModel.EstimateSheet", "EstimateSheet")
+                    b.HasOne("pba_api.Models.EpicStatusModel.EpicStatus", "EpicStatus")
                         .WithMany("Epics")
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -358,13 +347,13 @@ namespace pba_api.Migrations
                 {
                     b.HasOne("pba_api.Models.CustomerModel.Customer", "Customer")
                         .WithMany("EstimateSheets")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("pba_api.Models.SheetStatusModel.SheetStatus", "SheetStatus")
                         .WithMany("EstimateSheets")
-                        .HasForeignKey("SheetStatusId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -385,7 +374,7 @@ namespace pba_api.Migrations
                 {
                     b.HasOne("pba_api.Models.EstimateSheetModel.EstimateSheet", "EstimateSheet")
                         .WithMany("EstimateSheetRiskProfiles")
-                        .HasForeignKey("EstimateSheetId")
+                        .HasForeignKey("RiskProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -410,13 +399,13 @@ namespace pba_api.Migrations
 
                     b.HasOne("pba_api.Models.RiskProfileModel.RiskProfile", "RiskProfile")
                         .WithMany("Tasks")
-                        .HasForeignKey("RiskProfileId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("pba_api.Models.RoleModel.Role", "Role")
                         .WithMany("Tasks")
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

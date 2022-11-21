@@ -1,22 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using NuGet.Protocol;
 using pba_api.Data;
 using pba_api.DTOs;
 using pba_api.Models.UserModel;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace pba_api.Controllers
 {

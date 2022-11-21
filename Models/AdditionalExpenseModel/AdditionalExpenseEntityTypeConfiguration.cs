@@ -31,10 +31,12 @@ namespace pba_api.Models.AdditionalExpenseModel
                 .HasColumnType("bit")
                 .IsRequired();
 
+            #region EntityRelations
             builder
                 .HasOne(x => x.EstimateSheet)
-                .WithMany(c => c.AdditionalExpenses)
+                .WithMany(a => a.AdditionalExpenses)
                 .HasForeignKey(x => x.EstimateSheetId);
+            #endregion
         }
     }
 }

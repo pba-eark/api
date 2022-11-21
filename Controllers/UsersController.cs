@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
+using pba_api.DTOs.CreateDtos;
+using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.UserModel;
 using System.Security.Claims;
 
@@ -13,28 +16,27 @@ namespace pba_api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        //private readonly User _user;
+        private readonly IMapper _mapper;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
-            //_user = GetCurrentUser();
+            _mapper = mapper;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        public async Task<ActionResult<IEnumerable<ReturnUserDto>>> GetUser()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnTaskDto>>(users));
         }
 
         // GET: api/Users/Me
         [HttpGet("me")]
         public IActionResult GetMe()
         {
-            var user = GetCurrentUser();
-
-            return Ok(user);
+            return Ok(GetCurrentUser());
         }
 
         // GET: api/Users/5
@@ -71,14 +73,9 @@ namespace pba_api.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, CreateUserDto dto)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(dto).State = EntityState.Modified;
 
             try
             {
@@ -103,25 +100,28 @@ namespace pba_api.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<ReturnUserDto>> PostUser(CreateUserDto dto)
         {
+            var user = _mapper.Map<User>(dto);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+            var returnDto = _mapper.Map<ReturnUserDto>(user);
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUser), returnDto);
+            //return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var dbObject = await _context.Users.FindAsync(id);
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.Users.Remove(dbObject);
             await _context.SaveChangesAsync();
 
             return NoContent();

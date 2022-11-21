@@ -16,9 +16,14 @@ namespace pba_api.Models.EstimateSheetRiskProfileModel
 
             #region EntityRelations
             builder
-                .HasOne(x => x.RiskProfile)
-                .WithMany(e => e.EstimateSheetRiskProfiles)
-                .HasForeignKey(x => x.RiskProfileId);
+                .HasOne(r => r.RiskProfile)
+                .WithMany(x => x.EstimateSheetRiskProfiles)
+                .HasForeignKey(r => r.RiskProfileId);
+
+            builder
+                .HasOne(e => e.EstimateSheet)
+                .WithMany(x => x.EstimateSheetRiskProfiles)
+                .HasForeignKey(e => e.RiskProfileId);
             #endregion
         }
     }

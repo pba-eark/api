@@ -19,6 +19,13 @@ namespace pba_api.Models.SheetStatusModel
                 .HasColumnType("varchar")
                 .HasMaxLength(50)
                 .IsRequired();
+
+            #region EntityRelations
+            builder
+                .HasMany(e => e.EstimateSheets)
+                .WithOne(x => x.SheetStatus)
+                .HasForeignKey(e => e.Id);
+            #endregion
         }
     }
 }

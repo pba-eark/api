@@ -4,34 +4,33 @@ using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
-using pba_api.Models.CustomerModel;
 
 namespace pba_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class TasksController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
-        public CustomersController(IMapper mapper, ApplicationDbContext context)
+        public TasksController(IMapper mapper, ApplicationDbContext context)
         {
             _mapper = mapper;
             _context = context;
         }
 
-        // GET: api/Customers
+        // GET: api/Tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReturnCustomerDto>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<ReturnTaskDto>>> GetTasks()
         {
-            var customers = await _context.Customers.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnCustomerDto>>(customers));
+            var tasks = await _context.Tasks.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnTaskDto>>(tasks));
         }
 
-        // GET: api/Customers/5
+        // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReturnCustomerDto>> GetCustomer(int id)
+        public async Task<ActionResult<ReturnTaskDto>> GetTask(int id)
         {
             var dbObject = await _context.Tasks.FindAsync(id);
 
@@ -40,27 +39,32 @@ namespace pba_api.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<ReturnCustomerDto>(dbObject);
+            return _mapper.Map<ReturnTaskDto>(dbObject);
         }
 
-        // POST: api/
+        // POST: api/Tasks
         [HttpPost]
-        public async Task<ActionResult<ReturnCustomerDto>> PostCustomer(CreateCustomerDto dto)
+        public async Task<ActionResult<CreateTaskDto>> PostTask(CreateTaskDto dto)
         {
-            var customer = _mapper.Map<Customer>(dto);
-            _context.Customers.Add(customer);
+            var task = _mapper.Map<Models.TaskModel.Task>(dto);
+            _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCustomer), dto);
+            return CreatedAtAction(nameof(GetTask), dto);
         }
 
-        // PUT: api/Customers/5
+        // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, CreateCustomerDto dto)
+        public async Task<IActionResult> PutTask(int id, CreateTaskDto dto)
         {
-            var customer = _mapper.Map<Customer>(dto);
-            _context.Entry(customer).State = EntityState.Modified;
+            //if (id != dto.Id)
+            //{
+            //    return BadRequest();
+            //}
+
+            var task = _mapper.Map<Models.TaskModel.Task>(dto);
+            _context.Entry(task).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +72,7 @@ namespace pba_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
+                if (!TaskExists(id))
                 {
                     return NotFound();
                 }
@@ -81,25 +85,25 @@ namespace pba_api.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Cusotmers/5
+        // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteTask(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
+            var task = await _context.Tasks.FindAsync(id);
+            if (task == null)
             {
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
+            _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CustomerExists(int id)
+        private bool TaskExists(int id)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _context.Tasks.Any(e => e.Id == id);
         }
     }
 }
