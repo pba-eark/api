@@ -12,6 +12,6 @@ namespace pba_api.Models.EpicModel
         public EstimateSheet EstimateSheet { get; set; }
 
         public int EpicStatusId { get; set; }
-        public EpicStatus Epic { get; set; }
+        public EpicStatus EpicStatus { get; set; }
     }
 }

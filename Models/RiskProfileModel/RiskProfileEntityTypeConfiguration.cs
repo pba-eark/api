@@ -29,6 +29,18 @@ namespace pba_api.Models.RiskProfileModel
                 .Property(x => x.Percentage)
                 .HasColumnType("int")
                 .IsRequired();
+
+            #region
+            builder
+                .HasMany(e => e.EstimateSheetRiskProfiles)
+                .WithOne(x => x.RiskProfile)
+                .HasForeignKey(e => new { e.RiskProfileId, e.EstimateSheetId });
+
+            builder
+                .HasMany(t => t.Tasks)
+                .WithOne(x => x.RiskProfile)
+                .HasForeignKey(t => t.Id);
+            #endregion
         }
     }
 }

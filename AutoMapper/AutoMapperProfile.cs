@@ -5,6 +5,7 @@ using pba_api.Models.CustomerModel;
 using pba_api.Models.EpicModel;
 using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
+using pba_api.Models.RiskProfileModel;
 using pba_api.Models.UserModel;
 
 namespace pba_api.AutoMapper
@@ -30,6 +31,12 @@ namespace pba_api.AutoMapper
 
             CreateMap<EpicStatus, EpicStatusDto>();
             CreateMap<EpicStatusDto, EpicStatus>();
+
+            CreateMap<Task, TaskDto>();
+            CreateMap<TaskDto, Task>();
+
+            CreateMap<RiskProfile, RiskProfileDto>();
+            CreateMap<RiskProfileDto, RiskProfile>();
         }
     }
 }

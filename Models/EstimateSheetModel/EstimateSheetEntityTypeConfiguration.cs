@@ -35,19 +35,24 @@ namespace pba_api.Models.EstimateSheetModel
                 .HasForeignKey(x => x.SheetStatusId);
 
             builder
-                .HasMany(x => x.AdditionalExpenses)
-                .WithOne(a => a.EstimateSheet)
+                .HasMany(a => a.AdditionalExpenses)
+                .WithOne(x => x.EstimateSheet)
                 .HasForeignKey(a => a.Id);
 
             builder
-                .HasMany(x => x.Epics)
-                .WithOne(e => e.EstimateSheet)
+                .HasMany(e => e.Epics)
+                .WithOne(x => x.EstimateSheet)
                 .HasForeignKey(e => e.Id);
 
             builder
-                .HasMany(x => x.Tasks)
-                .WithOne(t => t.EstimateSheet)
+                .HasMany(t => t.Tasks)
+                .WithOne(x => x.EstimateSheet)
                 .HasForeignKey(t => t.Id);
+
+            builder
+                .HasMany(e => e.EstimateSheetRiskProfiles)
+                .WithOne(x => x.EstimateSheet)
+                .HasForeignKey(e => new { e.RiskProfileId, e.EstimateSheetId });
             #endregion
 
             #region PropertyConfigurations

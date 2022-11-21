@@ -34,7 +34,7 @@ namespace pba_api.Controllers
 
         // GET: api/EstimateSheets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExpandoObject>> GetEstimateSheets(int id, [FromQuery] string? included)
+        public async Task<ActionResult<ExpandoObject>> GetEstimateSheet(int id, [FromQuery] string? included)
         {
             string[] queryParams = Array.Empty<string>();
 
@@ -43,14 +43,14 @@ namespace pba_api.Controllers
                 queryParams = included.Split(",");
             }
 
-            var estimateSheetDb = await _context.EstimateSheets.FindAsync(id);
+            var dbObject = await _context.EstimateSheets.FindAsync(id);
 
-            if (estimateSheetDb == null)
+            if (dbObject == null)
             {
                 return NotFound();
             }
 
-            EstimateSheetDto estimateSheet = _mapper.Map<EstimateSheetDto>(estimateSheetDb);
+            EstimateSheetDto estimateSheet = _mapper.Map<EstimateSheetDto>(dbObject);
 
             dynamic returnObj = new ExpandoObject();
 
@@ -58,19 +58,19 @@ namespace pba_api.Controllers
 
             if (queryParams.Length > 0 && queryParams.Contains("user"))
             {
-                var user = await _context.Users.FindAsync(estimateSheetDb.UserId);
+                var user = await _context.Users.FindAsync(dbObject.UserId);
                 returnObj.user = user;
             }
 
             if (queryParams.Length > 0 && queryParams.Contains("customer"))
             {
-                var customer = await _context.Customers.FindAsync(estimateSheetDb.CustomerId);
+                var customer = await _context.Customers.FindAsync(dbObject.CustomerId);
                 returnObj.customer = customer;
             }
 
             if (queryParams.Length > 0 && queryParams.Contains("status"))
             {
-                var status = await _context.SheetStatus.FindAsync(estimateSheetDb.SheetStatusId);
+                var status = await _context.SheetStatus.FindAsync(dbObject.SheetStatusId);
                 returnObj.status = status;
             }
 
