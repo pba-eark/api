@@ -7,6 +7,7 @@ using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.UserModel;
 using System.Security.Claims;
+using BC = BCrypt.Net.BCrypt;
 
 namespace pba_api.Controllers
 {
@@ -29,7 +30,7 @@ namespace pba_api.Controllers
         public async Task<ActionResult<IEnumerable<ReturnUserDto>>> GetUser()
         {
             var users = await _context.Users.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnTaskDto>>(users));
+            return Ok(_mapper.Map<List<ReturnUserDto>>(users));
         }
 
         // GET: api/Users/Me
@@ -103,12 +104,12 @@ namespace pba_api.Controllers
         public async Task<ActionResult<ReturnUserDto>> PostUser(CreateUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             var returnDto = _mapper.Map<ReturnUserDto>(user);
 
             return CreatedAtAction(nameof(GetUser), returnDto);
-            //return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
