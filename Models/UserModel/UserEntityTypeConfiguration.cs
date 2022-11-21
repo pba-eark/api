@@ -31,6 +31,10 @@ namespace pba_api.Models.UserModel
                 .HasColumnType("varchar")
                 .HasMaxLength(50)
                 .IsRequired();
+            
+            builder
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
             builder
                 .Property(x => x.Password)

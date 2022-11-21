@@ -105,8 +105,15 @@ namespace pba_api.Controllers
         {
             var user = _mapper.Map<User>(dto);
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return Ok("Email is already in use.");
+            }
             var returnDto = _mapper.Map<ReturnUserDto>(user);
 
             return CreatedAtAction(nameof(GetUser), returnDto);
