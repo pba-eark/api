@@ -8,6 +8,7 @@ using pba_api.Models.UserModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BC = BCrypt.Net.BCrypt;
 
 namespace pba_api.Controllers
 {
@@ -63,9 +64,15 @@ namespace pba_api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private User AuthenticateUser(UserLoginDTO userLoginDto)
+        private User? AuthenticateUser(UserLoginDTO userLoginDto)
         {
-            return _context.Users.FirstOrDefault(o => o.Email.ToLower() == userLoginDto.Email.ToLower() && o.Password == userLoginDto.Password);
+            var user = _context.Users.SingleOrDefault(x => x.Email == userLoginDto.Email);
+
+            if (BC.Verify(userLoginDto.Password, user.Password))
+            {
+                return user;
+            }
+            return null;
         }
 
         [AllowAnonymous]
