@@ -27,7 +27,7 @@ namespace pba_api.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReturnUserDto>>> GetUser()
+        public async Task<ActionResult<IEnumerable<ReturnUserDto>>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();
             return Ok(_mapper.Map<List<ReturnUserDto>>(users));
@@ -109,7 +109,7 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
             var returnDto = _mapper.Map<ReturnUserDto>(user);
 
-            return CreatedAtAction(nameof(GetUser), returnDto);
+            return CreatedAtAction(nameof(GetUsers), returnDto);
         }
 
         // DELETE: api/Users/5
