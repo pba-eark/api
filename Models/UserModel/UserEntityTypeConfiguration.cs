@@ -42,12 +42,12 @@ namespace pba_api.Models.UserModel
                 .HasMaxLength(2400)
                 .IsRequired();
 
-            #region EntityRelations
-            builder
-                .HasMany(e => e.EstimateSheets)
-                .WithOne(x => x.User)
-                .HasForeignKey(e => e.Id);
-            #endregion
+            //#region EntityRelations
+            //builder
+            //    .HasMany(e => e.EstimateSheets)
+            //    .WithOne(x => x.User)
+            //    .HasForeignKey(e => e.Id);
+            //#endregion
         }
     }
 }

@@ -121,7 +121,8 @@ namespace pba_api.Migrations
                 name: "EstimateSheets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SheetName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     JiraBoardId = table.Column<int>(type: "int", nullable: false),
@@ -131,7 +132,6 @@ namespace pba_api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     WireframeLink = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     SheetStatusId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -139,21 +139,15 @@ namespace pba_api.Migrations
                 {
                     table.PrimaryKey("PK_EstimateSheets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EstimateSheets_Customers_Id",
-                        column: x => x.Id,
+                        name: "FK_EstimateSheets_Customers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EstimateSheets_SheetStatus_Id",
-                        column: x => x.Id,
+                        name: "FK_EstimateSheets_SheetStatus_SheetStatusId",
+                        column: x => x.SheetStatusId,
                         principalTable: "SheetStatus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EstimateSheets_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -223,10 +217,10 @@ namespace pba_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EstimateSheetRiskProfiles", x => new { x.RiskProfileId, x.EstimateSheetId });
+                    table.PrimaryKey("PK_EstimateSheetRiskProfiles", x => new { x.EstimateSheetId, x.RiskProfileId });
                     table.ForeignKey(
-                        name: "FK_EstimateSheetRiskProfiles_EstimateSheets_RiskProfileId",
-                        column: x => x.RiskProfileId,
+                        name: "FK_EstimateSheetRiskProfiles_EstimateSheets_EstimateSheetId",
+                        column: x => x.EstimateSheetId,
                         principalTable: "EstimateSheets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -234,6 +228,32 @@ namespace pba_api.Migrations
                         name: "FK_EstimateSheetRiskProfiles_RiskProfiles_RiskProfileId",
                         column: x => x.RiskProfileId,
                         principalTable: "RiskProfiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("Relational:Collation", "utf8mb4_danish_ci");
+
+            migrationBuilder.CreateTable(
+                name: "EstimateSheetUsers",
+                columns: table => new
+                {
+                    EstimateSheetId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EstimateSheetUsers", x => new { x.EstimateSheetId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_EstimateSheetUsers_EstimateSheets_EstimateSheetId",
+                        column: x => x.EstimateSheetId,
+                        principalTable: "EstimateSheets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EstimateSheetUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -292,8 +312,23 @@ namespace pba_api.Migrations
                 column: "EstimateSheetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EstimateSheets_UserId",
+                name: "IX_EstimateSheetRiskProfiles_RiskProfileId",
+                table: "EstimateSheetRiskProfiles",
+                column: "RiskProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EstimateSheets_CustomerId",
                 table: "EstimateSheets",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EstimateSheets_SheetStatusId",
+                table: "EstimateSheets",
+                column: "SheetStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EstimateSheetUsers_UserId",
+                table: "EstimateSheetUsers",
                 column: "UserId");
         }
 
@@ -309,10 +344,16 @@ namespace pba_api.Migrations
                 name: "EstimateSheetRiskProfiles");
 
             migrationBuilder.DropTable(
+                name: "EstimateSheetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Tasks");
 
             migrationBuilder.DropTable(
                 name: "EpicStatus");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "EstimateSheets");
@@ -328,9 +369,6 @@ namespace pba_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "SheetStatus");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

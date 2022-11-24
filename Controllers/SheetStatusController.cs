@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using pba_api.Models.SheetStatusModel;
 
 namespace pba_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SheetStatusController : ControllerBase
@@ -62,8 +64,9 @@ namespace pba_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSheetStatus(int id, CreateSheetStatusDto dto)
         {
-            var dbObject = _mapper.Map<SheetStatus>(dto);
-            _context.Entry(dbObject).State = EntityState.Modified;
+            var sheetStatus = _mapper.Map<SheetStatus>(dto);
+            //sheetStatus.Id = id;
+            _context.Entry(sheetStatus).State = EntityState.Modified;
 
             try
             {

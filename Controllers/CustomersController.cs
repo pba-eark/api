@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.CustomerModel;
 
 namespace pba_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
@@ -33,7 +36,7 @@ namespace pba_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ReturnCustomerDto>> GetCustomer(int id)
         {
-            var dbObject = await _context.Tasks.FindAsync(id);
+            var dbObject = await _context.Customers.FindAsync(id);
 
             if (dbObject == null)
             {
@@ -43,15 +46,16 @@ namespace pba_api.Controllers
             return _mapper.Map<ReturnCustomerDto>(dbObject);
         }
 
-        // POST: api/
+        // POST: api/Customers
         [HttpPost]
         public async Task<ActionResult<ReturnCustomerDto>> PostCustomer(CreateCustomerDto dto)
         {
             var customer = _mapper.Map<Customer>(dto);
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
+            var returnDto = _mapper.Map<ReturnCustomerDto>(customer);
 
-            return CreatedAtAction(nameof(GetCustomer), dto);
+            return CreatedAtAction(nameof(GetCustomers), returnDto);
         }
 
         // PUT: api/Customers/5
@@ -60,6 +64,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutCustomer(int id, CreateCustomerDto dto)
         {
             var customer = _mapper.Map<Customer>(dto);
+            customer.Id = id;
             _context.Entry(customer).State = EntityState.Modified;
 
             try

@@ -12,18 +12,18 @@ namespace pba_api.Models.EstimateSheetRiskProfileModel
                 .HasCharSet("utf8mb4");
 
             builder
-                .HasKey(x => new { x.RiskProfileId, x.EstimateSheetId });
+                .HasKey(x => new { x.EstimateSheetId, x.RiskProfileId });
 
             #region EntityRelations
             builder
-                .HasOne(r => r.RiskProfile)
-                .WithMany(x => x.EstimateSheetRiskProfiles)
-                .HasForeignKey(r => r.RiskProfileId);
+                .HasOne(x => x.EstimateSheet)
+                .WithMany(e => e.EstimateSheetRiskProfiles)
+                .HasForeignKey(x => x.EstimateSheetId);
 
             builder
-                .HasOne(e => e.EstimateSheet)
-                .WithMany(x => x.EstimateSheetRiskProfiles)
-                .HasForeignKey(e => e.RiskProfileId);
+                .HasOne(x => x.RiskProfile)
+                .WithMany(r => r.EstimateSheetRiskProfiles)
+                .HasForeignKey(x => x.RiskProfileId);
             #endregion
         }
     }
