@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
@@ -10,6 +11,7 @@ using System.Dynamic;
 
 namespace pba_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EstimateSheetsController : ControllerBase
@@ -25,10 +27,10 @@ namespace pba_api.Controllers
 
         // GET: api/EstimateSheets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EstimateSheet>>> GetEstimateSheets()
+        public async Task<ActionResult<IEnumerable<ReturnEstimateSheetDto>>> GetEstimateSheets()
         {
             var estimateSheet = await _context.EstimateSheets.ToListAsync();
-            return Ok(_mapper.Map<List<CreateEstimateSheetDto>>(estimateSheet));
+            return Ok(_mapper.Map<List<ReturnEstimateSheetDto>>(estimateSheet));
         }
 
         // GET: api/EstimateSheets/5
@@ -55,12 +57,6 @@ namespace pba_api.Controllers
 
             returnObj.estimateSheet = estimateSheet;
 
-            if (queryParams.Length > 0 && queryParams.Contains("user"))
-            {
-                var user = await _context.Users.FindAsync(dbObject.UserId);
-                returnObj.user = _mapper.Map<ReturnUserDto>(user);
-            }
-
             if (queryParams.Length > 0 && queryParams.Contains("customer"))
             {
                 var customer = await _context.Customers.FindAsync(dbObject.CustomerId);
@@ -78,13 +74,14 @@ namespace pba_api.Controllers
 
         // POST: api/EstimateSheets
         [HttpPost]
-        public async Task<ActionResult<CreateEstimateSheetDto>> PostEstimateSheet(CreateEstimateSheetDto dto)
+        public async Task<ActionResult<ReturnEstimateSheetDto>> PostEstimateSheet(CreateEstimateSheetDto dto)
         {
             var estimateSheet = _mapper.Map<EstimateSheet>(dto);
             _context.EstimateSheets.Add(estimateSheet);
             await _context.SaveChangesAsync();
+            var returnObj = _mapper.Map<ReturnEstimateSheetDto>(estimateSheet);
 
-            return CreatedAtAction(nameof(GetEstimateSheets), new { id = estimateSheet.Id }, dto);
+            return CreatedAtAction(nameof(GetEstimateSheets), returnObj);
         }
 
         // PUT: api/EstimateSheets/5
@@ -92,11 +89,6 @@ namespace pba_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEstimateSheet(int id, CreateEstimateSheetDto dto)
         {
-            if (id != dto.Id)
-            {
-                return BadRequest();
-            }
-
             var estimateSheet = _mapper.Map<EstimateSheet>(dto);
             _context.Entry(estimateSheet).State = EntityState.Modified;
 

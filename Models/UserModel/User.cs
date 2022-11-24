@@ -1,4 +1,5 @@
 ﻿using pba_api.Models.EstimateSheetModel;
+using pba_api.Models.EstimateSheetUserModel;
 
 namespace pba_api.Models.UserModel
 {
@@ -9,6 +10,6 @@ namespace pba_api.Models.UserModel
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public virtual ICollection<EstimateSheet> EstimateSheets { get; set; }
+        public virtual ICollection<EstimateSheetUser> EstimateSheetUsers { get; set; }
     }
 }

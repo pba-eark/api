@@ -20,12 +20,12 @@ namespace pba_api.Models.SheetStatusModel
                 .HasMaxLength(50)
                 .IsRequired();
 
-            #region EntityRelations
-            builder
-                .HasMany(e => e.EstimateSheets)
-                .WithOne(x => x.SheetStatus)
-                .HasForeignKey(e => e.Id);
-            #endregion
+            //#region EntityRelations
+            //builder
+            //    .HasMany(e => e.EstimateSheets)
+            //    .WithOne(x => x.SheetStatus)
+            //    .HasForeignKey(e => e.Id);
+            //#endregion
         }
     }
 }

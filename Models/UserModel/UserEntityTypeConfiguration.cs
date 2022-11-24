@@ -31,19 +31,19 @@ namespace pba_api.Models.UserModel
                 .HasColumnType("varchar")
                 .HasMaxLength(50)
                 .IsRequired();
-
+            
             builder
                 .Property(x => x.Password)
                 .HasColumnType("varchar")
                 .HasMaxLength(2400)
                 .IsRequired();
 
-            #region EntityRelations
-            builder
-                .HasMany(e => e.EstimateSheets)
-                .WithOne(x => x.User)
-                .HasForeignKey(e => e.Id);
-            #endregion
+            //#region EntityRelations
+            //builder
+            //    .HasMany(e => e.EstimateSheets)
+            //    .WithOne(x => x.User)
+            //    .HasForeignKey(e => e.Id);
+            //#endregion
         }
     }
 }

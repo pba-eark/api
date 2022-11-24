@@ -18,11 +18,6 @@ namespace pba_api.Models.EstimateSheetModel
 
             #region EntityRelations
             builder
-                .HasOne(x => x.User)
-                .WithMany(u => u.EstimateSheets)
-                .HasForeignKey(x => x.UserId);
-
-            builder
                 .HasOne(x => x.Customer)
                 .WithMany(c => c.EstimateSheets)
                 .HasForeignKey(x => x.CustomerId);
@@ -32,20 +27,20 @@ namespace pba_api.Models.EstimateSheetModel
                 .WithMany(s => s.EstimateSheets)
                 .HasForeignKey(x => x.SheetStatusId);
 
-            builder
-                .HasMany(a => a.AdditionalExpenses)
-                .WithOne(x => x.EstimateSheet)
-                .HasForeignKey(a => a.Id);
+            //builder
+            //    .HasMany(a => a.AdditionalExpenses)
+            //    .WithOne(x => x.EstimateSheet)
+            //    .HasForeignKey(a => a.Id);
 
-            builder
-                .HasMany(e => e.Epics)
-                .WithOne(x => x.EstimateSheet)
-                .HasForeignKey(e => e.Id);
+            //builder
+            //    .HasMany(e => e.Epics)
+            //    .WithOne(x => x.EstimateSheet)
+            //    .HasForeignKey(e => e.Id);
 
-            builder
-                .HasMany(t => t.Tasks)
-                .WithOne(x => x.EstimateSheet)
-                .HasForeignKey(t => t.Id);
+            //builder
+            //    .HasMany(t => t.Tasks)
+            //    .WithOne(x => x.EstimateSheet)
+            //    .HasForeignKey(t => t.Id);
 
             //builder
             //    .HasMany(e => e.EstimateSheetRiskProfiles)
@@ -57,31 +52,26 @@ namespace pba_api.Models.EstimateSheetModel
             builder
                 .Property(x => x.SheetName)
                 .HasColumnType("varchar")
-                .HasMaxLength(250)
-                .IsRequired();
+                .HasMaxLength(250);
 
             builder
                 .Property(x => x.JiraBoardId)
-                .HasColumnType("int")
-                .IsRequired();
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.WorkbookLink)
                 .HasColumnType("varchar")
-                .HasMaxLength(250)
-                .IsRequired(false);
+                .HasMaxLength(250);
 
             builder
                 .Property(x => x.JiraLink)
                 .HasColumnType("varchar")
-                .HasMaxLength(250)
-                .IsRequired(false);
+                .HasMaxLength(250);
 
             builder
                 .Property(x => x.WireframeLink)
                 .HasColumnType("varchar")
-                .HasMaxLength(250)
-                .IsRequired(false);
+                .HasMaxLength(250);
 
             // NavigationProperties
             //builder

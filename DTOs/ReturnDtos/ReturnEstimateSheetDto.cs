@@ -1,7 +1,11 @@
-﻿namespace pba_api.DTOs.CreateDtos
+﻿namespace pba_api.DTOs.ReturnDtos
 {
-    public class CreateEstimateSheetDto
+    public class ReturnEstimateSheetDto
     {
+        /// <summary>
+        /// The id of the <see cref="EstimateSheet"/>
+        /// </summary>
+        public int Id { get; set; }
         /// <summary>
         /// Name of the <see cref="EstimateSheetDto"/>
         /// </summary>
