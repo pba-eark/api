@@ -18,7 +18,7 @@ namespace pba_api.Models.EstimateSheetModel
         /// <summary>
         /// Name of the <see cref="EstimateSheet"/>
         /// </summary>
-        public string SheetName { get; set; } = string.Empty;
+        public string SheetName { get; set; }
 
         /// <summary>
         /// Id of the Jira Board, where the <see cref="EstimateSheet"/> sends and gets task

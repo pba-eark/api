@@ -77,7 +77,19 @@ namespace pba_api.Controllers
         public async Task<ActionResult<ReturnEstimateSheetDto>> PostEstimateSheet(CreateEstimateSheetDto dto)
         {
             var estimateSheet = _mapper.Map<EstimateSheet>(dto);
+
+            if (estimateSheet.CustomerId == 0)
+            {
+                estimateSheet.CustomerId = null;
+            }
+
+            if (estimateSheet.SheetStatusId == 0)
+            {
+                estimateSheet.SheetStatusId = null;
+            }
+
             _context.EstimateSheets.Add(estimateSheet);
+
             await _context.SaveChangesAsync();
             var returnObj = _mapper.Map<ReturnEstimateSheetDto>(estimateSheet);
 
