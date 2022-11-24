@@ -84,10 +84,10 @@ namespace pba_api.Controllers
         //}
 
         // DELETE: api/EstimateSheetUsers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEstimateSheetUser(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEstimateSheetUser([FromQuery] int sheetId, [FromQuery] int userId)
         {
-            var dbObject = await _context.EstimateSheetUsers.FindAsync(id);
+            var dbObject = await _context.EstimateSheetUsers.FindAsync(sheetId, userId);
             if (dbObject == null)
             {
                 return NotFound();

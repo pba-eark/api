@@ -1,0 +1,2237 @@
+{
+	"info": {
+		"_postman_id": "8b94d2ab-ee32-4e46-8da9-c895066d43a5",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.variables.set(\"bearer_token\", pm.response.text());\r",
+									"});\r",
+									"\r",
+									"const deleteUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(deleteUser);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.variables.set('user_id', pm.response.json().id);\r",
+									"    pm.variables.set('email', pm.response.json().email);\r",
+									"});\r",
+									"\r",
+									"const login = {\r",
+									"    url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"email\": `${pm.variables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(login, function (err, response) {\r",
+									"    pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{first_Name}}\",\r\n    \"lastName\": \"{{last_Name}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const deleteUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(deleteUser, function (err, response) {\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/Users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id)\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/Users/:Id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"Users",
+								":Id"
+							],
+							"variable": [
+								{
+									"key": "Id",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Create Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.variables.set('customer_id', pm.response.json().id);\r",
+									"});\r",
+									"\r",
+									"const deleteCustomer = {\r",
+									"    url: `${pm.environment.get('base_url')}/customers/${pm.variables.get('customer_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteCustomer, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customerName\": \"{{customer_name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/Customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"Customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const deleteCustomer = {\r",
+									"    url: `${pm.environment.get('base_url')}/customers/${pm.variables.get('customer_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteCustomer, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createCustomer = {\r",
+									"            url: `${pm.environment.get('base_url')}/customers`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"customerName\": `${pm.collectionVariables.get('customer_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createCustomer, function (err, response) {\r",
+									"            pm.variables.set(\"customer_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/Customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"Customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const deleteCustomer = {\r",
+									"    url: `${pm.environment.get('base_url')}/customers/${pm.variables.get('customer_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteCustomer, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createCustomer = {\r",
+									"            url: `${pm.environment.get('base_url')}/customers`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"customerName\": `${pm.collectionVariables.get('customer_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createCustomer, function (err, response) {\r",
+									"            pm.variables.set(\"customer_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/Customers/:Id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"Customers",
+								":Id"
+							],
+							"variable": [
+								{
+									"key": "Id",
+									"value": "{{customer_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const deleteCustomer = {\r",
+									"    url: `${pm.environment.get('base_url')}/customers/${pm.variables.get('customer_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteCustomer, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createCustomer = {\r",
+									"            url: `${pm.environment.get('base_url')}/customers`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"customerName\": `${pm.collectionVariables.get('customer_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createCustomer, function (err, response) {\r",
+									"            pm.variables.set(\"customer_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customerName\": \"Lego System A/S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/Customers/:Id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"Customers",
+								":Id"
+							],
+							"variable": [
+								{
+									"key": "Id",
+									"value": "{{customer_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id)\r",
+									"    pm.variables.set(\"email\", response.json().email)\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createCustomer = {\r",
+									"            url: `${pm.environment.get('base_url')}/customers`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"customerName\": `${pm.collectionVariables.get('customer_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createCustomer, function (err, response) {\r",
+									"            pm.variables.set(\"customer_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"const deleteUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(deleteUser, function (err, response) {\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/customers/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SheetStatus",
+			"item": [
+				{
+					"name": "Create SheetStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.variables.set('sheetStatus_id', pm.response.json().id);\r",
+									"});\r",
+									"\r",
+									"const deleteSheetStatus = {\r",
+									"    url: `${pm.environment.get('base_url')}/sheetstatus/${pm.variables.get('sheetStatus_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteSheetStatus, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sheetStatusName\": \"{{sheetStatus_name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/sheetstatus",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sheetstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All SheetStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createSheetStatus = {\r",
+									"            url: `${pm.environment.get('base_url')}/sheetstatus`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"sheetStatusName\": `${pm.collectionVariables.get('sheetStatus_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createSheetStatus, function (err, response) {\r",
+									"            pm.variables.set(\"sheetStatus_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const deleteSheetStatus = {\r",
+									"    url: `${pm.environment.get('base_url')}/sheetstatus/${pm.variables.get('sheetStatus_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteSheetStatus, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sheetstatus",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sheetstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SheetStatus by Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createSheetStatus = {\r",
+									"            url: `${pm.environment.get('base_url')}/sheetstatus`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"sheetStatusName\": `${pm.collectionVariables.get('sheetStatus_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createSheetStatus, function (err, response) {\r",
+									"            pm.variables.set(\"sheetStatus_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const deleteSheetStatus = {\r",
+									"    url: `${pm.environment.get('base_url')}/sheetstatus/${pm.variables.get('sheetStatus_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteSheetStatus, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sheetstatus",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sheetstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit SheetStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createSheetStatus = {\r",
+									"            url: `${pm.environment.get('base_url')}/sheetstatus`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"sheetStatusName\": `${pm.collectionVariables.get('sheetStatus_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createSheetStatus, function (err, response) {\r",
+									"            pm.variables.set(\"sheetStatus_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"const deleteSheetStatus = {\r",
+									"    url: `${pm.environment.get('base_url')}/sheetstatus/${pm.variables.get('sheetStatus_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteSheetStatus, function (err, response) {\r",
+									"\r",
+									"    const deleteUser = {\r",
+									"        url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(deleteUser, function (err, response) {\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sheetStatusName\": \"NOTDone\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/sheetstatus/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sheetstatus",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{sheetStatus_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete SheetStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id)\r",
+									"    pm.variables.set(\"email\", response.json().email)\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createSheetStatus = {\r",
+									"            url: `${pm.environment.get('base_url')}/sheetstatus`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"sheetStatusName\": `${pm.collectionVariables.get('sheetStatus_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createSheetStatus, function (err, response) {\r",
+									"            pm.variables.set(\"sheetStatus_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sheetstatus/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sheetstatus",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{sheetStatus_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EstimateSheets",
+			"item": [
+				{
+					"name": "Create EstimateSheet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"const deleteSheetStatus = {\r",
+									"    url: `${pm.environment.get('base_url')}/sheetstatus/${pm.variables.get('sheetStatus_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"const deleteCustomer = {\r",
+									"    url: `${pm.environment.get('base_url')}/customers/${pm.variables.get('customer_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteSheetStatus, function (err, response) {\r",
+									"\r",
+									"    pm.sendRequest(deleteCustomer, function (err, response) {\r",
+									"        const deleteUser = {\r",
+									"            url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"            method: 'DELETE',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(deleteUser, function (err, response) {\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const createCustomer = {\r",
+									"            url: `${pm.environment.get('base_url')}/customers`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"customerName\": `${pm.collectionVariables.get('customer_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createCustomer, function (err, response) {\r",
+									"            pm.variables.set(\"customer_id\", response.json().id)\r",
+									"        });\r",
+									"\r",
+									"        const createSheetStatus = {\r",
+									"            url: `${pm.environment.get('base_url')}/sheetstatus`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"sheetStatusName\": `${pm.collectionVariables.get('sheetStatus_name')}`,\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(createSheetStatus, function (err, response) {\r",
+									"            pm.variables.set(\"sheetStatus_id\", response.json().id)\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sheetName\": \"{{$randomStreetName}}\",\r\n  \"jiraBoardId\": {{jiraBoard_id}},\r\n  \"workbookLink\": \"{{$randomLoremSentence}}\",\r\n  \"jiraLink\": \"{{$randomLoremSentence}}\",\r\n  \"wireframeLink\": \"{{$randomLoremSentence}}\",\r\n  \"customerId\": {{customer_id}},\r\n  \"sheetStatusId\": {{sheetStatus_id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/estimatesheets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"estimatesheets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EstimateSheetUsers",
+			"item": [
+				{
+					"name": "Create EstimateSheetUser",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const createUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/users`,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(\r",
+									"            {\r",
+									"                \"firstName\": `${pm.collectionVariables.get('first_Name')}`,\r",
+									"                \"lastName\": `${pm.collectionVariables.get('last_Name')}`,\r",
+									"                \"email\": `${pm.collectionVariables.get('email')}`,\r",
+									"                \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"            }\r",
+									"        )\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(createUser, function (err, response) {\r",
+									"\r",
+									"    pm.variables.set(\"user_id\", response.json().id);\r",
+									"    pm.variables.set(\"email\", response.json().email);\r",
+									"\r",
+									"    const login = {\r",
+									"        url: `${pm.environment.get('base_url')}/auth/login`,\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                    \"email\": `${pm.variables.get('email')}`,\r",
+									"                    \"password\": `${pm.collectionVariables.get('password')}`\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(login, function (err, response) {\r",
+									"        pm.variables.set(\"bearer_token\", response.text());\r",
+									"\r",
+									"        const CreateEstimeSheet = {\r",
+									"            url: `${pm.environment.get('base_url')}/estimatesheets`,\r",
+									"            method: 'POST',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: 'raw',\r",
+									"                raw: JSON.stringify(\r",
+									"                    {\r",
+									"                        \"sheetName\": \"YasBoard\",\r",
+									"                        \"jiraBoardId\": 15251,\r",
+									"                        \"workbookLink\": \"Her er et link\",\r",
+									"                        \"jiraLink\": \"Her er et link\",\r",
+									"                        \"wireframeLink\": \"Her er et link\"\r",
+									"                    }\r",
+									"                )\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(CreateEstimeSheet, function (err, response) {\r",
+									"           pm.variables.set(\"sheet_id\", response.json().id); \r",
+									"        });\r",
+									"\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"const deleteEstimateSheetUser = {\r",
+									"    url: `${pm.environment.get('base_url')}/estimatesheetusers/?sheetId=${pm.variables.get('sheet_id')}&userId=${pm.variables.get('user_id')}`,\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"        'Content-Type': 'application/json'\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(deleteEstimateSheetUser, function (err, response) {\r",
+									"\r",
+									"    const deleteEstimateSheet = {\r",
+									"        url: `${pm.environment.get('base_url')}/estimatesheets/${pm.variables.get('sheet_id')}`,\r",
+									"        method: 'DELETE',\r",
+									"        header: {\r",
+									"            'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    }\r",
+									"\r",
+									"    pm.sendRequest(deleteEstimateSheet, function (err, response) {\r",
+									"        \r",
+									"        const deleteUser = {\r",
+									"            url: `${pm.environment.get('base_url')}/users/${pm.variables.get('user_id')}`,\r",
+									"            method: 'DELETE',\r",
+									"            header: {\r",
+									"                'Authorization': `bearer ${pm.variables.get('bearer_token')}`,\r",
+									"                'Content-Type': 'application/json'\r",
+									"            }\r",
+									"        };\r",
+									"\r",
+									"        pm.sendRequest(deleteUser, function (err, response) {\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"estimateSheetId\": {{sheet_id}},\r\n    \"userId\": {{user_id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/estimatesheetusers?sheetId={{sheet_id}}&userId={{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"estimatesheetusers"
+							],
+							"query": [
+								{
+									"key": "sheetId",
+									"value": "{{sheet_id}}"
+								},
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "first_Name",
+			"value": "Rasmus",
+			"type": "default"
+		},
+		{
+			"key": "last_Name",
+			"value": "Andersen",
+			"type": "default"
+		},
+		{
+			"key": "email",
+			"value": "tyu@mail.dk",
+			"type": "default"
+		},
+		{
+			"key": "password",
+			"value": "1234",
+			"type": "default"
+		},
+		{
+			"key": "customer_name",
+			"value": "Lego A/S",
+			"type": "default"
+		},
+		{
+			"key": "sheetStatus_name",
+			"value": "Done",
+			"type": "default"
+		},
+		{
+			"key": "jiraBoard_id",
+			"value": "225588",
+			"type": "default"
+		}
+	]
+}

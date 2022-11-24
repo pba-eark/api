@@ -20,12 +20,14 @@ namespace pba_api.Models.EstimateSheetModel
             builder
                 .HasOne(x => x.Customer)
                 .WithMany(c => c.EstimateSheets)
-                .HasForeignKey(x => x.CustomerId);
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .HasOne(x => x.SheetStatus)
                 .WithMany(s => s.EstimateSheets)
-                .HasForeignKey(x => x.SheetStatusId);
+                .HasForeignKey(x => x.SheetStatusId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             //builder
             //    .HasMany(a => a.AdditionalExpenses)
