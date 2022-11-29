@@ -13,5 +13,7 @@ namespace pba_api.Models.EpicModel
 
         public int EpicStatusId { get; set; }
         public EpicStatus EpicStatus { get; set; }
+
+        public virtual ICollection<Models.TaskModel.Task> Tasks { get; set; }
     }
 }

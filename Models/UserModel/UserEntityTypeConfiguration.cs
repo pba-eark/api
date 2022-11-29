@@ -17,20 +17,17 @@ namespace pba_api.Models.UserModel
             builder
                 .Property(x => x.FirstName)
                 .HasColumnType("varchar")
-                .HasMaxLength(500)
-                .IsRequired();
+                .HasMaxLength(500);
 
             builder
                 .Property(x => x.LastName)
                 .HasColumnType("varchar")
-                .HasMaxLength(500)
-                .IsRequired();
+                .HasMaxLength(500);
 
             builder
                 .Property(x => x.Email)
                 .HasColumnType("varchar")
-                .HasMaxLength(50)
-                .IsRequired();
+                .HasMaxLength(50);
             
             builder
                 .HasIndex(u => u.Email)
@@ -39,15 +36,7 @@ namespace pba_api.Models.UserModel
             builder
                 .Property(x => x.Password)
                 .HasColumnType("varchar")
-                .HasMaxLength(2400)
-                .IsRequired();
-
-            //#region EntityRelations
-            //builder
-            //    .HasMany(e => e.EstimateSheets)
-            //    .WithOne(x => x.User)
-            //    .HasForeignKey(e => e.Id);
-            //#endregion
+                .HasMaxLength(2400);
         }
     }
 }

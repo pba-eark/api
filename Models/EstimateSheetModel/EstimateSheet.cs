@@ -49,7 +49,6 @@ namespace pba_api.Models.EstimateSheetModel
 
         public virtual ICollection<AdditionalExpense> AdditionalExpenses { get; set; }
         public virtual ICollection<Epic> Epics { get; set; }
-        public virtual ICollection<TaskModel.Task> Tasks { get; set; }
         public virtual ICollection<EstimateSheetRiskProfile> EstimateSheetRiskProfiles { get; set; }
         public virtual ICollection<EstimateSheetUser> EstimateSheetUsers { get; set; }
         #endregion

@@ -16,31 +16,20 @@ namespace pba_api.Models.RiskProfileModel
 
             builder
                 .Property(x => x.Global)
-                .HasColumnType("bit")
-                .IsRequired();
+                .HasColumnType("bit");
 
             builder
                 .Property(x => x.ProfileName)
                 .HasColumnType("varchar")
-                .HasMaxLength(50)
-                .IsRequired();
+                .HasMaxLength(50);
 
             builder
                 .Property(x => x.Percentage)
-                .HasColumnType("int")
-                .IsRequired();
-
-            #region
-            builder
-                .HasMany(e => e.EstimateSheetRiskProfiles)
-                .WithOne(x => x.RiskProfile)
-                .HasForeignKey(e => new { e.RiskProfileId, e.EstimateSheetId });
+                .HasColumnType("int");
 
             builder
-                .HasMany(t => t.Tasks)
-                .WithOne(x => x.RiskProfile)
-                .HasForeignKey(t => t.Id);
-            #endregion
+                .Property(x => x.Default)
+                .HasColumnType("bit");
         }
     }
 }

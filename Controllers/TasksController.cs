@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
+using pba_api.DTOs;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
 
@@ -22,10 +23,24 @@ namespace pba_api.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReturnTaskDto>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<ReturnTaskDto>>> GetAllTasks()
         {
-            var tasks = await _context.Tasks.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnTaskDto>>(tasks));
+            var dbObject = await _context.Tasks.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnTaskDto>>(dbObject));
+        }
+
+        // GET: api/Tasks/Epic/5
+        [HttpGet("Epic/{epicId}")]
+        public async Task<ActionResult<IEnumerable<ReturnTaskDto>>> GetTasks(int epicId)
+        {
+            var dbObject = await _context.Tasks.Where(x => x.EpicId.Equals(epicId)).ToListAsync();
+
+            if (dbObject == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<List<ReturnTaskDto>>(dbObject));
         }
 
         // GET: api/Tasks/5

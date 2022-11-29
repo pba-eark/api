@@ -4,9 +4,14 @@
     {
         public int Id { get; set; }
         public int ParentId { get; set; }
+        public string TaskName { get; set; }
         public double HourEstimate { get; set; }
-        public string EstimateReasoning { get; set; } = string.Empty;
+        public string EstimateReasoning { get; set; }
         public bool OptOut { get; set; }
-        public string TaskDescription { get; set; } = string.Empty;
+        public string TaskDescription { get; set; }
+
+        public int EpicId { get; set; }
+        public int RoleId { get; set; }
+        public int RiskProfileId { get; set; }
     }
 }

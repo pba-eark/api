@@ -43,9 +43,9 @@ namespace pba_api.AutoMapper
             CreateMap<CreateEpicStatusDto, EpicStatus>();
             CreateMap<EpicStatus, ReturnEpicStatusDto>();
 
-            CreateMap<Task, CreateTaskDto>();
-            CreateMap<CreateTaskDto, Task>();
-            CreateMap<Task, ReturnTaskDto>();
+            CreateMap<Models.TaskModel.Task, CreateTaskDto>();
+            CreateMap<CreateTaskDto, Models.TaskModel.Task>();
+            CreateMap<Models.TaskModel.Task, ReturnTaskDto>();
 
             CreateMap<RiskProfile, CreateRiskProfileDto>();
             CreateMap<CreateRiskProfileDto, RiskProfile>();
