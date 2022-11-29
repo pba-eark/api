@@ -24,15 +24,29 @@ namespace pba_api.Controllers
 
         // GET: api/Epics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReturnEpicDto>>> GetEpics()
+        public async Task<ActionResult<IEnumerable<ReturnEpicDto>>> GetAllEpics()
         {
             var dbObject = await _context.Epics.ToListAsync();
             return Ok(_mapper.Map<List<ReturnEpicDto>>(dbObject));
         }
 
+        // GET: api/Epics/Sheet/5
+        [HttpGet("{sheetId}")]
+        public async Task<ActionResult<IEnumerable<ReturnEpicDto>>> GetEpics(int sheetId)
+        {
+            var dbObject = await _context.Epics.Where(x => x.EstimateSheetId.Equals(sheetId)).ToListAsync();
+
+            if (dbObject == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<List<ReturnEpicDto>>(dbObject));
+        }
+
         // GET: api/Epics/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReturnEpicDto>> GetEpic(int id)
+        public async Task<ActionResult<ReturnEpicDto>> GetOneEpic(int id)
         {
             var dbObject = await _context.Epics.FindAsync(id);
 

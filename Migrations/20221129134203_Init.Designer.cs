@@ -11,8 +11,8 @@ using pba_api.Data;
 namespace pba_api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221125103612_TaskAndEpicRelation")]
-    partial class TaskAndEpicRelation
+    [Migration("20221129134203_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,6 +104,9 @@ namespace pba_api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<ulong>("Default")
+                        .HasColumnType("bit");
 
                     b.Property<string>("EpicStatusName")
                         .IsRequired()
@@ -204,6 +207,9 @@ namespace pba_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<ulong>("Default")
+                        .HasColumnType("bit");
+
                     b.Property<ulong>("Global")
                         .HasColumnType("bit");
 
@@ -250,6 +256,9 @@ namespace pba_api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<ulong>("Default")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SheetStatusName")
                         .IsRequired()

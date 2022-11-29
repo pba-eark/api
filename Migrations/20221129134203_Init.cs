@@ -35,7 +35,8 @@ namespace pba_api.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     EpicStatusName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, collation: "utf8mb4_danish_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Default = table.Column<ulong>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,7 +54,8 @@ namespace pba_api.Migrations
                     Global = table.Column<ulong>(type: "bit", nullable: false),
                     ProfileName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Percentage = table.Column<int>(type: "int", nullable: false)
+                    Percentage = table.Column<int>(type: "int", nullable: false),
+                    Default = table.Column<ulong>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,7 +88,8 @@ namespace pba_api.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SheetStatusName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, collation: "utf8mb4_danish_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Default = table.Column<ulong>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -125,15 +128,15 @@ namespace pba_api.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SheetName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    JiraBoardId = table.Column<int>(type: "int", nullable: false),
+                    JiraBoardId = table.Column<int>(type: "int", nullable: true),
                     WorkbookLink = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     JiraLink = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     WireframeLink = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    SheetStatusId = table.Column<int>(type: "int", nullable: false)
+                    CustomerId = table.Column<int>(type: "int", nullable: true),
+                    SheetStatusId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -143,13 +146,13 @@ namespace pba_api.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_EstimateSheets_SheetStatus_SheetStatusId",
                         column: x => x.SheetStatusId,
                         principalTable: "SheetStatus",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4")
                 .Annotation("Relational:Collation", "utf8mb4_danish_ci");
@@ -164,7 +167,7 @@ namespace pba_api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<float>(type: "float", nullable: false),
                     Continuous = table.Column<ulong>(type: "bit", nullable: false),
-                    EstimateSheetId = table.Column<int>(type: "int", nullable: false)
+                    EstimateSheetId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,8 +176,7 @@ namespace pba_api.Migrations
                         name: "FK_AdditionalExpenses_EstimateSheets_EstimateSheetId",
                         column: x => x.EstimateSheetId,
                         principalTable: "EstimateSheets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4")
                 .Annotation("Relational:Collation", "utf8mb4_danish_ci");
@@ -183,7 +185,8 @@ namespace pba_api.Migrations
                 name: "Epics",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     EpicName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EstimateSheetId = table.Column<int>(type: "int", nullable: false),
@@ -193,8 +196,8 @@ namespace pba_api.Migrations
                 {
                     table.PrimaryKey("PK_Epics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Epics_EpicStatus_Id",
-                        column: x => x.Id,
+                        name: "FK_Epics_EpicStatus_EpicStatusId",
+                        column: x => x.EpicStatusId,
                         principalTable: "EpicStatus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -264,39 +267,41 @@ namespace pba_api.Migrations
                 name: "Tasks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ParentId = table.Column<int>(type: "int", nullable: true),
+                    TaskName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false, collation: "utf8mb4_danish_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     HourEstimate = table.Column<float>(type: "float", nullable: false),
-                    EstimateReasoning = table.Column<string>(type: "varchar(2400)", maxLength: 2400, nullable: false, collation: "utf8mb4_danish_ci")
+                    EstimateReasoning = table.Column<string>(type: "varchar(2400)", maxLength: 2400, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OptOut = table.Column<ulong>(type: "bit", nullable: false),
-                    TaskDescription = table.Column<string>(type: "varchar(2400)", maxLength: 2400, nullable: false, collation: "utf8mb4_danish_ci")
+                    TaskDescription = table.Column<string>(type: "varchar(2400)", maxLength: 2400, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    EstimateSheetId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    EpicId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
                     RiskProfileId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_EstimateSheets_Id",
-                        column: x => x.Id,
-                        principalTable: "EstimateSheets",
+                        name: "FK_Tasks_Epics_EpicId",
+                        column: x => x.EpicId,
+                        principalTable: "Epics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tasks_RiskProfiles_Id",
-                        column: x => x.Id,
+                        name: "FK_Tasks_RiskProfiles_RiskProfileId",
+                        column: x => x.RiskProfileId,
                         principalTable: "RiskProfiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tasks_Roles_Id",
-                        column: x => x.Id,
+                        name: "FK_Tasks_Roles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4")
                 .Annotation("Relational:Collation", "utf8mb4_danish_ci");
@@ -305,6 +310,11 @@ namespace pba_api.Migrations
                 name: "IX_AdditionalExpenses_EstimateSheetId",
                 table: "AdditionalExpenses",
                 column: "EstimateSheetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Epics_EpicStatusId",
+                table: "Epics",
+                column: "EpicStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Epics_EstimateSheetId",
@@ -330,15 +340,33 @@ namespace pba_api.Migrations
                 name: "IX_EstimateSheetUsers_UserId",
                 table: "EstimateSheetUsers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_EpicId",
+                table: "Tasks",
+                column: "EpicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_RiskProfileId",
+                table: "Tasks",
+                column: "RiskProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_RoleId",
+                table: "Tasks",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "AdditionalExpenses");
-
-            migrationBuilder.DropTable(
-                name: "Epics");
 
             migrationBuilder.DropTable(
                 name: "EstimateSheetRiskProfiles");
@@ -350,19 +378,22 @@ namespace pba_api.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "EpicStatus");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "EstimateSheets");
+                name: "Epics");
 
             migrationBuilder.DropTable(
                 name: "RiskProfiles");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "EpicStatus");
+
+            migrationBuilder.DropTable(
+                name: "EstimateSheets");
 
             migrationBuilder.DropTable(
                 name: "Customers");
