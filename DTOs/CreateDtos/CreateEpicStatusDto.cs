@@ -2,6 +2,7 @@
 {
     public class CreateEpicStatusDto
     {
-        public string EpicStatusName { get; set; } = string.Empty;
+        public string EpicStatusName { get; set; }
+        public bool Default { get; set; }
     }
 }

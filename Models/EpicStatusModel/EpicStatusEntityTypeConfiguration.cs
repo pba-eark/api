@@ -19,12 +19,9 @@ namespace pba_api.Models.EpicStatusModel
                 .HasColumnType("varchar")
                 .HasMaxLength(50);
 
-            #region EntityRelations
             builder
-                .HasMany(e => e.Epics)
-                .WithOne(x => x.EpicStatus)
-                .HasForeignKey(e => e.Id);
-            #endregion
+                .Property(x => x.Default)
+                .HasColumnType("bit");
         }
     }
 }

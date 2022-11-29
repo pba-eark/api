@@ -18,14 +18,17 @@ namespace pba_api.Models.TaskModel
             builder
                 .HasOne(x => x.Role)
                 .WithMany(r => r.Tasks)
-                .HasForeignKey(x => x.RoleId)
-                .IsRequired();
+                .HasForeignKey(x => x.RoleId);
 
             builder
                 .HasOne(x => x.RiskProfile)
                 .WithMany(r => r.Tasks)
-                .HasForeignKey(x => x.RiskProfileId)
-                .IsRequired();
+                .HasForeignKey(x => x.RiskProfileId);
+
+            builder
+                .HasOne(x => x.Epic)
+                .WithMany(t => t.Tasks)
+                .HasForeignKey(x => x.EpicId);
             #endregion
 
             #region PropertyConfigurations
@@ -34,15 +37,18 @@ namespace pba_api.Models.TaskModel
                 .HasColumnType("int");
 
             builder
+                .Property(x => x.TaskName)
+                .HasColumnType("varchar")
+                .HasMaxLength(250);
+
+            builder
                 .Property(x => x.HourEstimate)
-                .HasColumnType("float")
-                .IsRequired();
+                .HasColumnType("float");
 
             builder
                 .Property(x => x.EstimateReasoning)
                 .HasColumnType("varchar")
-                .HasMaxLength(2400)
-                .IsRequired();
+                .HasMaxLength(2400);
 
             builder
                 .Property(x => x.OptOut)
@@ -51,8 +57,7 @@ namespace pba_api.Models.TaskModel
             builder
                 .Property(x => x.TaskDescription)
                 .HasColumnType("varchar")
-                .HasMaxLength(2400)
-                .IsRequired();
+                .HasMaxLength(2400);
             #endregion
         }
     }

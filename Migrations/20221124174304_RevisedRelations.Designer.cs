@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pba_api.Data;
 
@@ -10,9 +11,10 @@ using pba_api.Data;
 namespace pba_api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221124174304_RevisedRelations")]
+    partial class RevisedRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,9 +104,6 @@ namespace pba_api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<ulong>("Default")
-                        .HasColumnType("bit");
 
                     b.Property<string>("EpicStatusName")
                         .IsRequired()
@@ -205,9 +204,6 @@ namespace pba_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<ulong>("Default")
-                        .HasColumnType("bit");
-
                     b.Property<ulong>("Global")
                         .HasColumnType("bit");
 
@@ -255,9 +251,6 @@ namespace pba_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<ulong>("Default")
-                        .HasColumnType("bit");
-
                     b.Property<string>("SheetStatusName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -277,12 +270,12 @@ namespace pba_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("EpicId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EstimateReasoning")
                         .HasMaxLength(2400)
                         .HasColumnType("varchar(2400)");
+
+                    b.Property<int>("EstimateSheetId")
+                        .HasColumnType("int");
 
                     b.Property<float>("HourEstimate")
                         .HasColumnType("float");
@@ -310,7 +303,7 @@ namespace pba_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpicId");
+                    b.HasIndex("EstimateSheetId");
 
                     b.HasIndex("RiskProfileId");
 
@@ -444,9 +437,9 @@ namespace pba_api.Migrations
 
             modelBuilder.Entity("pba_api.Models.TaskModel.Task", b =>
                 {
-                    b.HasOne("pba_api.Models.EpicModel.Epic", "Epic")
+                    b.HasOne("pba_api.Models.EstimateSheetModel.EstimateSheet", "EstimateSheet")
                         .WithMany("Tasks")
-                        .HasForeignKey("EpicId")
+                        .HasForeignKey("EstimateSheetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -460,7 +453,7 @@ namespace pba_api.Migrations
                         .WithMany("Tasks")
                         .HasForeignKey("RoleId");
 
-                    b.Navigation("Epic");
+                    b.Navigation("EstimateSheet");
 
                     b.Navigation("RiskProfile");
 
@@ -470,11 +463,6 @@ namespace pba_api.Migrations
             modelBuilder.Entity("pba_api.Models.CustomerModel.Customer", b =>
                 {
                     b.Navigation("EstimateSheets");
-                });
-
-            modelBuilder.Entity("pba_api.Models.EpicModel.Epic", b =>
-                {
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("pba_api.Models.EpicStatusModel.EpicStatus", b =>
@@ -491,6 +479,8 @@ namespace pba_api.Migrations
                     b.Navigation("EstimateSheetRiskProfiles");
 
                     b.Navigation("EstimateSheetUsers");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("pba_api.Models.RiskProfileModel.RiskProfile", b =>

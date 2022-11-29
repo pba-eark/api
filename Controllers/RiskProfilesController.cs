@@ -54,7 +54,7 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
             var returnDto = _mapper.Map<ReturnRiskProfileDto>(riskProfile);
 
-            return CreatedAtAction(nameof(GetRiskProfile), returnDto);
+            return CreatedAtAction(nameof(GetRiskProfiles), returnDto);
         }
 
         // PUT: api/RiskProfiles/5

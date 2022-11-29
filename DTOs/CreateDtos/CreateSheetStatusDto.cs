@@ -2,6 +2,7 @@
 {
     public class CreateSheetStatusDto
     {
-        public string SheetStatusName { get; set; } = string.Empty;
+        public string SheetStatusName { get; set; }
+        public bool Default { get; set; }
     }
 }

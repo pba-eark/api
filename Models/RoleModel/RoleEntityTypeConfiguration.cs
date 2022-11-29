@@ -17,21 +17,11 @@ namespace pba_api.Models.RoleModel
             builder
                 .Property(x => x.RoleName)
                 .HasColumnType("varchar")
-                .HasMaxLength(50)
-                .IsRequired();
+                .HasMaxLength(50);
 
             builder
                 .Property(x => x.HourlyWage)
-                .HasColumnType("float")
-                .IsRequired();
-
-            #region EntityRelations
-            builder
-                .HasMany(e => e.Tasks)
-                .WithOne(x => x.Role)
-                .HasForeignKey(e => e.Id);
-            #endregion
-
+                .HasColumnType("float");
         }
     }
 }

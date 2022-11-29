@@ -18,18 +18,15 @@ namespace pba_api.Models.AdditionalExpenseModel
             builder
                 .Property(x => x.ExpenseName)
                 .HasColumnType("varchar")
-                .HasMaxLength(250)
-                .IsRequired();
+                .HasMaxLength(250);
 
             builder
                 .Property(x => x.Price)
-                .HasColumnType("float")
-                .IsRequired();
+                .HasColumnType("float");
 
             builder
                 .Property(x => x.Continuous)
-                .HasColumnType("bit")
-                .IsRequired();
+                .HasColumnType("bit");
 
             #region EntityRelations
             builder

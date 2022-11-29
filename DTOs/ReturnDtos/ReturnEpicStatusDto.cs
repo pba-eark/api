@@ -3,6 +3,7 @@
     public class ReturnEpicStatusDto
     {
         public int Id { get; set; }
-        public string EpicStatusName { get; set; } = string.Empty;
+        public string EpicStatusName { get; set; }
+        public bool Default { get; set; }
     }
 }

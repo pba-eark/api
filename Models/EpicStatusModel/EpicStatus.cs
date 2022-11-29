@@ -6,6 +6,7 @@ namespace pba_api.Models.EpicStatusModel
     {
         public int Id { get; set; }
         public string EpicStatusName { get; set; }
+        public bool Default { get; set; }
 
         public virtual ICollection<Epic> Epics { get; set; }
     }
