@@ -31,10 +31,10 @@ namespace pba_api.Controllers
         }
 
         // GET: api/Epics/Sheet/5
-        [HttpGet("{sheetId}")]
-        public async Task<ActionResult<IEnumerable<ReturnEpicDto>>> GetEpics(int sheetId)
+        [HttpGet("sheet/{id}")]
+        public async Task<ActionResult<IEnumerable<ReturnEpicDto>>> GetEpics(int id)
         {
-            var dbObject = await _context.Epics.Where(x => x.EstimateSheetId.Equals(sheetId)).ToListAsync();
+            var dbObject = await _context.Epics.Where(x => x.EstimateSheetId.Equals(id)).ToListAsync();
 
             if (dbObject == null)
             {
@@ -95,7 +95,7 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
             var returnDto = _mapper.Map<ReturnEpicDto>(epic);
 
-            return CreatedAtAction(nameof(GetEpics), returnDto);
+            return CreatedAtAction(nameof(GetAllEpics), returnDto);
         }
 
         // DELETE: api/Epics/5
