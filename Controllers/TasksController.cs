@@ -5,6 +5,7 @@ using pba_api.Data;
 using pba_api.DTOs;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.EstimateSheetModel;
 
 namespace pba_api.Controllers
 {
@@ -59,13 +60,14 @@ namespace pba_api.Controllers
 
         // POST: api/Tasks
         [HttpPost]
-        public async Task<ActionResult<CreateTaskDto>> PostTask(CreateTaskDto dto)
+        public async Task<ActionResult<ReturnTaskDto>> PostTask(CreateTaskDto dto)
         {
             var task = _mapper.Map<Models.TaskModel.Task>(dto);
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
+            var returnObj = _mapper.Map<ReturnTaskDto>(task);
 
-            return CreatedAtAction(nameof(GetTask), dto);
+            return CreatedAtAction(nameof(GetAllTasks), returnObj);
         }
 
         // PUT: api/Tasks/5
@@ -73,12 +75,8 @@ namespace pba_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, CreateTaskDto dto)
         {
-            //if (id != dto.Id)
-            //{
-            //    return BadRequest();
-            //}
-
             var task = _mapper.Map<Models.TaskModel.Task>(dto);
+            task.Id = id;
             _context.Entry(task).State = EntityState.Modified;
 
             try
