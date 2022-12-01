@@ -6,6 +6,7 @@ using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.EpicModel;
+using pba_api.Models.SheetStatusModel;
 
 namespace pba_api.Controllers
 {
@@ -64,6 +65,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutEpic(int id, CreateEpicDto dto)
         {
             var epic = _mapper.Map<Epic>(dto);
+            epic.Id = id;
             _context.Entry(epic).State = EntityState.Modified;
 
             try

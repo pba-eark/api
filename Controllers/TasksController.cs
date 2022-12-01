@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using pba_api.Data;
 using pba_api.DTOs;
 using pba_api.DTOs.CreateDtos;
@@ -114,6 +115,38 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        // DELETE: api/Tasks
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTasks(IEnumerable<DeleteTaskDto> tasks)
+        {
+            var messages = new List<string>();
+
+            foreach (var item in tasks)
+            {
+                var task = await _context.Tasks.FindAsync(item);
+                
+                if (task == null)
+                {
+                    messages.Add($"{item} could not be found");
+                }
+                else
+                {
+                    _context.Tasks.Remove(task);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (messages.IsNullOrEmpty())
+            {
+                return NoContent();
+            }
+            else
+            {
+                return (IActionResult)messages;
+            }
         }
 
         private bool TaskExists(int id)
