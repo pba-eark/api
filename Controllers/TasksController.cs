@@ -56,7 +56,7 @@ namespace pba_api.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<ReturnTaskDto>(dbObject);
+            return Ok(_mapper.Map<ReturnTaskDto>(dbObject));
         }
 
         // POST: api/Tasks
@@ -74,7 +74,7 @@ namespace pba_api.Controllers
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(int id, CreateTaskDto dto)
+        public async Task<ActionResult<ReturnTaskDto>> PutTask(int id, CreateTaskDto dto)
         {
             var task = _mapper.Map<Models.TaskModel.Task>(dto);
             task.Id = id;
@@ -96,7 +96,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnTaskDto>(task));
         }
 
         // DELETE: api/Tasks/5
@@ -113,38 +113,6 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        // DELETE: api/Tasks
-        [HttpDelete]
-        public async Task<IActionResult> DeleteTasks(IEnumerable<DeleteTaskDto> tasks)
-        {
-            var messages = new List<string>();
-
-            foreach (var item in tasks)
-            {
-                var task = await _context.Tasks.FindAsync(item);
-                
-                if (task == null)
-                {
-                    messages.Add($"{item} could not be found");
-                }
-                else
-                {
-                    _context.Tasks.Remove(task);
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
-            if (messages.IsNullOrEmpty())
-            {
-                return NoContent();
-            }
-            else
-            {
-                return (IActionResult)messages;
-            }
         }
 
         private bool TaskExists(int id)
