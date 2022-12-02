@@ -28,8 +28,9 @@ namespace pba_api.Controllers
         public async Task<ActionResult<IEnumerable<ReturnRoleDto>>> GetRoles()
         {
             var dbObject = await _context.Roles.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnAdditionalExpenseDto>>(dbObject));
+            return Ok(_mapper.Map<List<ReturnRoleDto>>(dbObject));
         }
+
 
         // GET: api/Roles/5
         [HttpGet("{id}")]

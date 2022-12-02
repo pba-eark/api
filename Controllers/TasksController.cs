@@ -78,6 +78,12 @@ namespace pba_api.Controllers
         {
             var task = _mapper.Map<Models.TaskModel.Task>(dto);
             task.Id = id;
+
+            if(task.ParentId == 0)
+            {
+                task.ParentId = null;
+            }
+
             _context.Entry(task).State = EntityState.Modified;
 
             try

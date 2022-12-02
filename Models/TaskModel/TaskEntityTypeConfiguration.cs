@@ -43,7 +43,8 @@ namespace pba_api.Models.TaskModel
 
             builder
                 .Property(x => x.HourEstimate)
-                .HasColumnType("float");
+                .HasColumnType("decimal")
+                .HasPrecision(6, 2);
 
             builder
                 .Property(x => x.EstimateReasoning)
