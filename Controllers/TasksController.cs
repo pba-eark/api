@@ -90,6 +90,11 @@ namespace pba_api.Controllers
                 task.ParentId = null;
             }
 
+            if (task.RoleId == 0)
+            {
+                task.RoleId = null;
+            }
+
             _context.Entry(task).State = EntityState.Modified;
 
             try
