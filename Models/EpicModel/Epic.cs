@@ -1,5 +1,6 @@
 ﻿using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace pba_api.Models.EpicModel
 {
@@ -7,7 +8,7 @@ namespace pba_api.Models.EpicModel
     {
         public int Id { get; set; }
         public string EpicName { get; set; }
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         public int EstimateSheetId { get; set; }
         public EstimateSheet EstimateSheet { get; set; }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace pba_api.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -274,7 +274,7 @@ namespace pba_api.Migrations
                     ParentId = table.Column<int>(type: "int", nullable: true),
                     TaskName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    HourEstimate = table.Column<float>(type: "float", nullable: false),
+                    HourEstimate = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false),
                     EstimateReasoning = table.Column<string>(type: "varchar(2400)", maxLength: 2400, nullable: true, collation: "utf8mb4_danish_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OptOut = table.Column<ulong>(type: "bit", nullable: false),

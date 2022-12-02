@@ -64,6 +64,12 @@ namespace pba_api.Controllers
         public async Task<ActionResult<ReturnTaskDto>> PostTask(CreateTaskDto dto)
         {
             var task = _mapper.Map<Models.TaskModel.Task>(dto);
+
+            if(task.RoleId == 0)
+            {
+                task.RoleId = null;
+            }
+
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
             var returnObj = _mapper.Map<ReturnTaskDto>(task);

@@ -11,8 +11,8 @@ using pba_api.Data;
 namespace pba_api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221202114236_Init")]
-    partial class Init
+    [Migration("20221202120647_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -291,8 +291,9 @@ namespace pba_api.Migrations
                         .HasMaxLength(2400)
                         .HasColumnType("varchar(2400)");
 
-                    b.Property<float>("HourEstimate")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HourEstimate")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<ulong>("OptOut")
                         .HasColumnType("bit");
