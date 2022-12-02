@@ -25,8 +25,8 @@ namespace pba_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReturnAdditionalExpenseDto>>> GetAdditionalExpenses()
         {
-            var additionalExpenses = await _context.AdditionalExpenses.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnAdditionalExpenseDto>>(additionalExpenses));
+            var dbObject = await _context.AdditionalExpenses.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnAdditionalExpenseDto>>(dbObject));
         }
 
         // GET: api/AdditionalExpenses/5
@@ -40,7 +40,7 @@ namespace pba_api.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<ReturnAdditionalExpenseDto>(dbObject);
+            return Ok(_mapper.Map<ReturnAdditionalExpenseDto>(dbObject));
         }
 
         // POST: api/AdditionalExpenses
@@ -61,6 +61,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutAdditionalExpense(int id, CreateAdditionalExpenseDto dto)
         {
             var additionalExpense = _mapper.Map<AdditionalExpense>(dto);
+            additionalExpense.Id = id;
             _context.Entry(additionalExpense).State = EntityState.Modified;
 
             try
@@ -79,7 +80,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnAdditionalExpenseDto>(additionalExpense));
         }
 
         // DELETE: api/AdditionalExpenses/5

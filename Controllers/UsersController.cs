@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.UserModel;
 using System.Security.Claims;
 using BC = BCrypt.Net.BCrypt;
@@ -74,9 +75,11 @@ namespace pba_api.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, CreateUserDto dto)
+        public async Task<ActionResult<ReturnUserDto>> PutUser(int id, CreateUserDto dto)
         {
-            _context.Entry(dto).State = EntityState.Modified;
+            var user = _mapper.Map<User>(dto);
+            user.Id= id;
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -94,7 +97,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnUserDto>(user));
         }
 
         // POST: api/Users

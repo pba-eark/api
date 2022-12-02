@@ -26,8 +26,8 @@ namespace pba_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EstimateSheetUserDto>>> GetEstimateSheetUsers()
         {
-            var estimateSheetUsers = await _context.EstimateSheetUsers.ToListAsync();
-            return Ok(_mapper.Map<List<EstimateSheetUserDto>>(estimateSheetUsers));
+            var dbObject = await _context.EstimateSheetUsers.ToListAsync();
+            return Ok(_mapper.Map<List<EstimateSheetUserDto>>(dbObject));
         }
 
         //// GET: api/EstimateSheetUsers/5

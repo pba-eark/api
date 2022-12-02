@@ -84,7 +84,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnEpicDto>(epic));
         }
 
         // POST: api/Epics

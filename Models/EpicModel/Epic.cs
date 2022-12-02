@@ -7,6 +7,7 @@ namespace pba_api.Models.EpicModel
     {
         public int Id { get; set; }
         public string EpicName { get; set; }
+        public string Comment { get; set; }
 
         public int EstimateSheetId { get; set; }
         public EstimateSheet EstimateSheet { get; set; }
