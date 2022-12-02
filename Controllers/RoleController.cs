@@ -63,6 +63,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutRoles(int id, CreateRoleDto dto)
         {
             var role = _mapper.Map<AdditionalExpense>(dto);
+            role.Id = id;
             _context.Entry(role).State = EntityState.Modified;
 
             try
@@ -81,7 +82,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnRoleDto>(role));
         }
 
         // DELETE: api/Roles/5
