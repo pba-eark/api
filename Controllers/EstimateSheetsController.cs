@@ -6,6 +6,7 @@ using pba_api.Data;
 using pba_api.DTOs;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
+using pba_api.Models.AdditionalExpensesModel;
 using pba_api.Models.EstimateSheetModel;
 using System.Dynamic;
 
@@ -29,8 +30,8 @@ namespace pba_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReturnEstimateSheetDto>>> GetEstimateSheets()
         {
-            var estimateSheet = await _context.EstimateSheets.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnEstimateSheetDto>>(estimateSheet));
+            var dbObject = await _context.EstimateSheets.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnEstimateSheetDto>>(dbObject));
         }
 
         // GET: api/EstimateSheets/5
@@ -102,6 +103,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutEstimateSheet(int id, CreateEstimateSheetDto dto)
         {
             var estimateSheet = _mapper.Map<EstimateSheet>(dto);
+            estimateSheet.CustomerId = id;
             _context.Entry(estimateSheet).State = EntityState.Modified;
 
             try
@@ -120,7 +122,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnEstimateSheetDto>(estimateSheet));
         }
 
         // DELETE: api/EstimateSheets/5

@@ -28,8 +28,8 @@ namespace pba_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReturnCustomerDto>>> GetCustomers()
         {
-            var customers = await _context.Customers.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnCustomerDto>>(customers));
+            var dbObject = await _context.Customers.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnCustomerDto>>(dbObject));
         }
 
         // GET: api/Customers/5
@@ -83,7 +83,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnCustomerDto>(customer));
         }
 
         // DELETE: api/Cusotmers/5

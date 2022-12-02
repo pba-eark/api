@@ -65,7 +65,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutSheetStatus(int id, CreateSheetStatusDto dto)
         {
             var sheetStatus = _mapper.Map<SheetStatus>(dto);
-            //sheetStatus.Id = id;
+            sheetStatus.Id = id;
             _context.Entry(sheetStatus).State = EntityState.Modified;
 
             try
@@ -84,7 +84,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnSheetStatusDto>(sheetStatus));
         }
 
         // DELETE: api/SheetStatus/5

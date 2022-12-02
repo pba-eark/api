@@ -27,8 +27,8 @@ namespace pba_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReturnRiskProfileDto>>> GetRiskProfiles()
         {
-            var riskProfiles = await _context.RiskProfiles.ToListAsync();
-            return Ok(_mapper.Map<List<ReturnRiskProfileDto>>(riskProfiles));
+            var dbObject = await _context.RiskProfiles.ToListAsync();
+            return Ok(_mapper.Map<List<ReturnRiskProfileDto>>(dbObject));
         }
 
         // GET: api/RiskProfiles/5
@@ -63,6 +63,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutRiskProfile(int id, CreateRiskProfileDto dto)
         {
             var riskProfile = _mapper.Map<RiskProfile>(dto);
+            riskProfile.Id = id;
             _context.Entry(riskProfile).State = EntityState.Modified;
 
             try
@@ -81,7 +82,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnRiskProfileDto>(riskProfile));
         }
 
         // DELETE: api/Tasks/5

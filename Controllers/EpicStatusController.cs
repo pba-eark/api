@@ -64,6 +64,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutEpicStatus(int id, CreateEpicStatusDto dto)
         {
             var epicStatus = _mapper.Map<EpicStatus>(dto);
+            epicStatus.Id= id;
             _context.Entry(epicStatus).State = EntityState.Modified;
 
             try
@@ -82,7 +83,7 @@ namespace pba_api.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(_mapper.Map<ReturnEpicStatusDto>(epicStatus));
         }
 
         // DELETE: api/EpicStatus/5
