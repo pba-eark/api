@@ -19,6 +19,11 @@ namespace pba_api.Models.EpicModel
                 .HasColumnType("varchar")
                 .HasMaxLength(50);
 
+            builder
+                .Property(x => x.Comment)
+                .HasColumnType("varchar")
+                .HasMaxLength(250);
+
             #region EntityRelations
             builder
                 .HasOne(x => x.EpicStatus)

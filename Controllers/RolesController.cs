@@ -12,12 +12,12 @@ namespace pba_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleController : ControllerBase
+    public class RolesController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
-        public RoleController(IMapper mapper, ApplicationDbContext context)
+        public RolesController(IMapper mapper, ApplicationDbContext context)
         {
             _mapper = mapper;
             _context = context;
