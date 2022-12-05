@@ -107,6 +107,7 @@ namespace pba_api.Controllers
         public async Task<ActionResult<ReturnUserDto>> PostUser(CreateUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
+            var rawPassword = user.Password;
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             try
             {
@@ -117,6 +118,7 @@ namespace pba_api.Controllers
             {
                 return Ok("Email is already in use.");
             }
+            user.Password = rawPassword;
             var returnDto = _mapper.Map<ReturnUserDto>(user);
 
             return CreatedAtAction(nameof(GetUsers), returnDto);
