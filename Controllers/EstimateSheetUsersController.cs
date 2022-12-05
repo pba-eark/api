@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
-using pba_api.DTOs;
+using pba_api.DTOs.Composites;
 using pba_api.Models.EstimateSheetUserModel;
 
 namespace pba_api.Controllers
@@ -24,25 +24,11 @@ namespace pba_api.Controllers
 
         // GET: api/EstimateSheetUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EstimateSheetUserDto>>> GetEstimateSheetUsers()
+        public async Task<ActionResult<IEnumerable<EstimateSheetUserDto>>> GetAllEstimateSheetUsers()
         {
             var dbObject = await _context.EstimateSheetUsers.ToListAsync();
             return Ok(_mapper.Map<List<EstimateSheetUserDto>>(dbObject));
         }
-
-        //// GET: api/EstimateSheetUsers/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<EstimateSheetUserDto>> GetEstimateSheetUser(int id)
-        //{
-        //    var dbObject = await _context.EstimateSheetUsers.FindAsync(id);
-
-        //    if (dbObject == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return _mapper.Map<EstimateSheetUserDto>(dbObject);
-        //}
 
         // POST: api/EstimateSheetUsers
         [HttpPost]
@@ -53,37 +39,10 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
             var returnDto = _mapper.Map<EstimateSheetUserDto>(estimateSheetUser);
 
-            return CreatedAtAction(nameof(GetEstimateSheetUsers), returnDto);
+            return CreatedAtAction(nameof(GetAllEstimateSheetUsers), returnDto);
         }
 
-        //// PUT: api/EstimateSheetUsers/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutEstimateSheetUser(int id, EstimateSheetUserDto dto)
-        //{
-        //    var estimateSheetUser = _mapper.Map<EstimateSheetUser>(dto);
-        //    _context.Entry(estimateSheetUser).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!EstimateSheetUsersExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // DELETE: api/EstimateSheetUsers/5
+        // DELETE: api/EstimateSheetUsers
         [HttpDelete]
         public async Task<IActionResult> DeleteEstimateSheetUser([FromQuery] int sheetId, [FromQuery] int userId)
         {
@@ -98,10 +57,5 @@ namespace pba_api.Controllers
 
             return NoContent();
         }
-
-        //private bool EstimateSheetUsersExists(int id)
-        //{
-        //    return _context.EstimateSheetUsers.Any(e => e.Id == id);
-        //}
     }
 }
