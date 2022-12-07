@@ -13,6 +13,10 @@ namespace pba_api.Models.RoleModel
 
             builder
                 .HasKey(x => x.Id);
+            
+            builder
+                .Property(x => x.Global)
+                .HasColumnType("bit");
 
             builder
                 .Property(x => x.RoleName)

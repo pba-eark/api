@@ -2,7 +2,9 @@
 {
     public class CreateRoleDto
     {
-        public string RoleName { get; set; } = string.Empty;
+        public bool Global { get; set; }
+        public bool Default { get; set; }
+        public string RoleName { get; set; }
         public double HourlyWage { get; set; }
     }
 }

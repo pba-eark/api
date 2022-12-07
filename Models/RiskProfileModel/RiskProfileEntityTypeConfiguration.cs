@@ -19,6 +19,10 @@ namespace pba_api.Models.RiskProfileModel
                 .HasColumnType("bit");
 
             builder
+                .Property(x => x.Default)
+                .HasColumnType("bit");
+
+            builder
                 .Property(x => x.ProfileName)
                 .HasColumnType("varchar")
                 .HasMaxLength(50);
@@ -26,10 +30,6 @@ namespace pba_api.Models.RiskProfileModel
             builder
                 .Property(x => x.Percentage)
                 .HasColumnType("int");
-
-            builder
-                .Property(x => x.Default)
-                .HasColumnType("bit");
         }
     }
 }

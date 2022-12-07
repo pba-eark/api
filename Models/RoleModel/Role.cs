@@ -3,6 +3,7 @@
     public class Role
     {
         public int Id { get; set; }
+        public bool Global { get; set; }
         public string RoleName { get; set; }
         public double HourlyWage { get; set; }
 

@@ -20,6 +20,10 @@ namespace pba_api.Models.EpicStatusModel
                 .HasMaxLength(50);
 
             builder
+                .Property(x => x.Global)
+                .HasColumnType("bit");
+
+            builder
                 .Property(x => x.Default)
                 .HasColumnType("bit");
         }

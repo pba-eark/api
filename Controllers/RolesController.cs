@@ -55,7 +55,7 @@ namespace pba_api.Controllers
             await _context.SaveChangesAsync();
             var returnDto = _mapper.Map<ReturnRoleDto>(role);
 
-            return CreatedAtAction(nameof(GetRole), returnDto);
+            return CreatedAtAction(nameof(GetRoles), returnDto);
         }
 
         // PUT: api/Roles/5
