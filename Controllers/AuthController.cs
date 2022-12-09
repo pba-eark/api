@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using pba_api.Data;
 using pba_api.DTOs;
+using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.UserModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -19,12 +21,14 @@ namespace pba_api.Controllers
         private IConfiguration _config;
         private readonly ApplicationDbContext _context;
         private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
 
-        public AuthController(IConfiguration config, ApplicationDbContext context, HttpClient httpClient)
+        public AuthController(IConfiguration config, ApplicationDbContext context, HttpClient httpClient, IMapper mapper)
         {
             _config = config;
             _context = context;
             _httpClient = httpClient;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -36,8 +40,10 @@ namespace pba_api.Controllers
             if (user != null)
             {
                 var token = GenerateToken(user);
+                var returnUserDto = _mapper.Map<ReturnUserDto>(user);
+                var response = new {User = returnUserDto, Token = token};
 
-                return Ok(token);
+                return Ok(response);
             }
 
             return NotFound("User not found");
