@@ -14,6 +14,8 @@ namespace pba_api.Models.EstimateSheetUserModel
             builder
                 .HasKey(x => new { x.EstimateSheetId, x.UserId });
 
+            builder.Property(x => x.Type).HasColumnType("varchar").HasMaxLength(36);
+
             #region EntityRelation
             builder
                 .HasOne(x => x.EstimateSheet)
