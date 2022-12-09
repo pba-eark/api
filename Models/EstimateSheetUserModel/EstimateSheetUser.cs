@@ -10,5 +10,6 @@ namespace pba_api.Models.EstimateSheetUserModel
         public EstimateSheet EstimateSheet { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public string Type { get; set; }
     }
 }
