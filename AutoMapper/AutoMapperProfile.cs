@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using pba_api.DTOs;
 using pba_api.DTOs.Composites;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
@@ -27,6 +28,7 @@ namespace pba_api.AutoMapper
             CreateMap<User, CreateUserDto>();
             CreateMap<CreateUserDto, User>();
             CreateMap<User, ReturnUserDto>();
+            CreateMap<User, UserLoginDTO>();
 
             CreateMap<Customer, CreateCustomerDto>();
             CreateMap<CreateCustomerDto, Customer>();

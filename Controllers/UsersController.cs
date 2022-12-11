@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pba_api.Data;
+using pba_api.DTOs;
 using pba_api.DTOs.CreateDtos;
 using pba_api.DTOs.ReturnDtos;
 using pba_api.Models.AdditionalExpensesModel;
@@ -104,7 +105,7 @@ namespace pba_api.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<ReturnUserDto>> PostUser(CreateUserDto dto)
+        public async Task<ActionResult<UserLoginDTO>> PostUser(CreateUserDto dto)
         {
             var user = _mapper.Map<User>(dto);
             var rawPassword = user.Password;
@@ -119,7 +120,7 @@ namespace pba_api.Controllers
                 return Ok("Email is already in use.");
             }
             user.Password = rawPassword;
-            var returnDto = _mapper.Map<ReturnUserDto>(user);
+            var returnDto = _mapper.Map<UserLoginDTO>(user);
 
             return CreatedAtAction(nameof(GetUsers), returnDto);
         }

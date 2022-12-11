@@ -12,7 +12,7 @@ namespace pba_api.Models.EstimateSheetUserModel
                 .HasCharSet("utf8mb4");
 
             builder
-                .HasKey(x => new { x.EstimateSheetId, x.UserId });
+                .HasKey(x => x.Id);
 
             builder.Property(x => x.Type).HasColumnType("varchar").HasMaxLength(36);
 
