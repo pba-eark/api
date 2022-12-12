@@ -6,6 +6,7 @@ using pba_api.Models.EpicModel;
 using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
 using pba_api.Models.EstimateSheetRiskProfileModel;
+using pba_api.Models.EstimateSheetRoleModel;
 using pba_api.Models.EstimateSheetUserModel;
 using pba_api.Models.RiskProfileModel;
 using pba_api.Models.RoleModel;
@@ -33,6 +34,7 @@ namespace pba_api.Data
             new RiskProfileEntityTypeConfiguration().Configure(modelBuilder.Entity<RiskProfile>());
             new EstimateSheetRiskProfileEntityTypeConfiguration().Configure(modelBuilder.Entity<EstimateSheetRiskProfile>());
             new EstimateSheetUserEntityTypeConfiguration().Configure(modelBuilder.Entity<EstimateSheetUser>());
+            new EstimateSheetRoleEntityTypeConfiguration().Configure(modelBuilder.Entity<EstimateSheetRole>());
         }
 
         public DbSet<User> Users { get; set; }
@@ -47,5 +49,6 @@ namespace pba_api.Data
         public DbSet<RiskProfile> RiskProfiles { get; set; }
         public DbSet<EstimateSheetRiskProfile> EstimateSheetRiskProfiles { get; set; }
         public DbSet<EstimateSheetUser> EstimateSheetUsers { get; set; }
+        public DbSet<EstimateSheetRole> EstimateSheetRoles { get; set; }
     }
 }

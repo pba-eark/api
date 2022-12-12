@@ -1,7 +1,4 @@
-﻿using pba_api.Models.EstimateSheetModel;
-using pba_api.Models.UserModel;
-
-namespace pba_api.DTOs.Composites
+﻿namespace pba_api.DTOs.Composites
 {
     public class EstimateSheetUserDto
     {

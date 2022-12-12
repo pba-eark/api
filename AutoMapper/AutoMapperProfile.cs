@@ -9,6 +9,7 @@ using pba_api.Models.EpicModel;
 using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
 using pba_api.Models.EstimateSheetRiskProfileModel;
+using pba_api.Models.EstimateSheetRoleModel;
 using pba_api.Models.EstimateSheetUserModel;
 using pba_api.Models.RiskProfileModel;
 using pba_api.Models.RoleModel;
@@ -67,6 +68,9 @@ namespace pba_api.AutoMapper
 
             CreateMap<EstimateSheetRiskProfile, EstimateSheetRiskProfileDto>();
             CreateMap<EstimateSheetRiskProfileDto, EstimateSheetRiskProfile>();
+
+            CreateMap<EstimateSheetRole, EstimateSheetRoleDto>();
+            CreateMap<EstimateSheetRoleDto, EstimateSheetRole>();
         }
     }
 }

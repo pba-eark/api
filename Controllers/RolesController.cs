@@ -63,7 +63,7 @@ namespace pba_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoles(int id, CreateRoleDto dto)
         {
-            var role = _mapper.Map<AdditionalExpense>(dto);
+            var role = _mapper.Map<Role>(dto);
             role.Id = id;
             _context.Entry(role).State = EntityState.Modified;
 

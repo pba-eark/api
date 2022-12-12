@@ -2,6 +2,7 @@
 using pba_api.Models.CustomerModel;
 using pba_api.Models.EpicModel;
 using pba_api.Models.EstimateSheetRiskProfileModel;
+using pba_api.Models.EstimateSheetRoleModel;
 using pba_api.Models.EstimateSheetUserModel;
 using pba_api.Models.SheetStatusModel;
 using pba_api.Models.UserModel;
@@ -51,6 +52,7 @@ namespace pba_api.Models.EstimateSheetModel
         public virtual ICollection<Epic> Epics { get; set; }
         public virtual ICollection<EstimateSheetRiskProfile> EstimateSheetRiskProfiles { get; set; }
         public virtual ICollection<EstimateSheetUser> EstimateSheetUsers { get; set; }
+        public virtual ICollection<EstimateSheetRole> EstimateSheetRoles { get; set; }
         #endregion
     }
 }
