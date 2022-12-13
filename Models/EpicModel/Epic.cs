@@ -1,5 +1,6 @@
 ﻿using pba_api.Models.EpicStatusModel;
 using pba_api.Models.EstimateSheetModel;
+using pba_api.Models.UserModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace pba_api.Models.EpicModel
@@ -15,6 +16,9 @@ namespace pba_api.Models.EpicModel
 
         public int EpicStatusId { get; set; }
         public EpicStatus EpicStatus { get; set; }
+
+        public int? UserId { get; set; }
+        public User? User { get; set; }
 
         public virtual ICollection<Models.TaskModel.Task> Tasks { get; set; }
     }
