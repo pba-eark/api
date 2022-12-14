@@ -6,6 +6,6 @@
         public string? Comment { get; set; }
         public int EstimateSheetId { get; set; }
         public int EpicStatusId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
     }
 }
