@@ -20,6 +20,11 @@ namespace pba_api.Models.SheetStatusModel
                 .HasMaxLength(50);
 
             builder
+                .Property(x => x.SheetStatusColor)
+                .HasColumnType("varchar")
+                .HasMaxLength(50);
+
+            builder
                 .Property(x => x.Global)
                 .HasColumnType("bit");
 

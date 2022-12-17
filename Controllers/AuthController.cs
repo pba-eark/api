@@ -73,7 +73,7 @@ namespace pba_api.Controllers
         private User? AuthenticateUser(UserLoginDTO userLoginDto)
         {
             var user = _context.Users.SingleOrDefault(x => x.Email == userLoginDto.Email);
-
+            if (user == null) return null;
             if (BC.Verify(userLoginDto.Password, user.Password))
             {
                 return user;
