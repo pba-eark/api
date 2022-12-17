@@ -103,6 +103,7 @@ namespace pba_api.Controllers
         public async Task<IActionResult> PutEstimateSheet(int id, CreateEstimateSheetDto dto)
         {
             var estimateSheet = _mapper.Map<EstimateSheet>(dto);
+            if(estimateSheet.CustomerId == 0) { estimateSheet.CustomerId= null; }
             estimateSheet.Id = id;
             _context.Entry(estimateSheet).State = EntityState.Modified;
 
