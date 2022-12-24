@@ -88,8 +88,8 @@ namespace pba_api.Controllers
             var data = new
             {
                 grant_type = "authorization_code",
-                client_id = _config["Atlassian:ClientId"],
-                client_secret = _config["Atlassian:Secret"],
+                client_id = _config["JiraClientId"],
+                client_secret = _config["JiraClientSecret"],
                 code = code,
                 redirect_uri = "https://localhost:7087/api/auth/atlassian"
             };
