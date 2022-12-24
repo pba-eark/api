@@ -107,7 +107,7 @@ namespace pba_api.Controllers
             var deserializedResult = JsonConvert.DeserializeObject<dynamic>(result);
             string accessToken = deserializedResult.access_token;
 
-            string redirectUrl = $"http://localhost:3001/callback?token={accessToken}";
+            string redirectUrl = $"{_config["clientUrl"]}/callback?token={accessToken}";
 
             Console.WriteLine(redirectUrl);
 
